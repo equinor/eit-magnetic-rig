@@ -14,6 +14,25 @@
         "info": ""
     },
     {
+        "id": "d12f49f7.adc66",
+        "type": "serial-port",
+        "serialport": "/dev/tty.usbserial-AR0JZC14",
+        "serialbaud": "115200",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": "10000"
+    },
+    {
         "id": "65c610d3.c6b9",
         "type": "inject",
         "z": "7f063300.e79e2c",
@@ -107,19 +126,6 @@
         ]
     },
     {
-        "id": "9790f8a0.fcf458",
-        "type": "lower-case",
-        "z": "d900094f.ace7f8",
-        "name": "Test",
-        "x": 330,
-        "y": 100,
-        "wires": [
-            [
-                "28e8fb72.4d2f14"
-            ]
-        ]
-    },
-    {
         "id": "28e8fb72.4d2f14",
         "type": "debug",
         "z": "d900094f.ace7f8",
@@ -137,31 +143,12 @@
         "wires": []
     },
     {
-        "id": "d12f49f7.adc66",
-        "type": "serial-port",
-        "serialport": "/dev/tty.usbserial-AR0JZC14",
-        "serialbaud": "115200",
-        "databits": "8",
-        "parity": "none",
-        "stopbits": "1",
-        "waitfor": "",
-        "dtr": "none",
-        "rts": "none",
-        "cts": "none",
-        "dsr": "none",
-        "newline": "\\n",
-        "bin": "false",
-        "out": "char",
-        "addchar": "",
-        "responsetimeout": "10000"
-    },
-    {
         "id": "29b54f72.c4d198",
         "type": "serial out",
         "z": "7f063300.e79e2c",
         "name": "Blackbox Controller",
         "serial": "d12f49f7.adc66",
-        "x": 520,
+        "x": 900,
         "y": 320,
         "wires": []
     },
@@ -184,14 +171,14 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "$H\\r",
+        "payload": "$H",
         "payloadType": "str",
         "x": 290,
         "y": 320,
         "wires": [
             [
-                "29b54f72.c4d198",
-                "b3bc9b36.b26108"
+                "b3bc9b36.b26108",
+                "ca791134.731c7"
             ]
         ]
     },
@@ -262,14 +249,14 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "$J=G91 G20 X0.5 F10\\r",
+        "payload": "$J=G91 G20 X1 F10",
         "payloadType": "str",
-        "x": 240,
+        "x": 230,
         "y": 380,
         "wires": [
             [
-                "29b54f72.c4d198",
-                "b3bc9b36.b26108"
+                "b3bc9b36.b26108",
+                "ca791134.731c7"
             ]
         ]
     },
@@ -292,14 +279,45 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "$\\r",
+        "payload": "?",
         "payloadType": "str",
         "x": 290,
         "y": 280,
         "wires": [
             [
-                "29b54f72.c4d198",
-                "b3bc9b36.b26108"
+                "b3bc9b36.b26108",
+                "ca791134.731c7"
+            ]
+        ]
+    },
+    {
+        "id": "9790f8a0.fcf458",
+        "type": "lower-case",
+        "z": "d900094f.ace7f8",
+        "name": "Test",
+        "x": 330,
+        "y": 100,
+        "wires": [
+            [
+                "28e8fb72.4d2f14"
+            ]
+        ]
+    },
+    {
+        "id": "ca791134.731c7",
+        "type": "function",
+        "z": "7f063300.e79e2c",
+        "name": "",
+        "func": "msg.payload = Buffer.from(msg.payload + \"\\r\");\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 720,
+        "y": 320,
+        "wires": [
+            [
+                "29b54f72.c4d198"
             ]
         ]
     }
