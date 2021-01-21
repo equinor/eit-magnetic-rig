@@ -7,6 +7,13 @@
         "info": ""
     },
     {
+        "id": "d900094f.ace7f8",
+        "type": "tab",
+        "label": "Custom Node Tester",
+        "disabled": false,
+        "info": ""
+    },
+    {
         "id": "65c610d3.c6b9",
         "type": "inject",
         "z": "7f063300.e79e2c",
@@ -67,6 +74,65 @@
         "statusType": "auto",
         "x": 480,
         "y": 240,
+        "wires": []
+    },
+    {
+        "id": "7c347d5.1a5be84",
+        "type": "inject",
+        "z": "d900094f.ace7f8",
+        "name": "UPPER CASE",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "TEST ME",
+        "payloadType": "str",
+        "x": 150,
+        "y": 100,
+        "wires": [
+            [
+                "9790f8a0.fcf458"
+            ]
+        ]
+    },
+    {
+        "id": "9790f8a0.fcf458",
+        "type": "lower-case",
+        "z": "d900094f.ace7f8",
+        "name": "Test",
+        "x": 330,
+        "y": 100,
+        "wires": [
+            [
+                "28e8fb72.4d2f14"
+            ]
+        ]
+    },
+    {
+        "id": "28e8fb72.4d2f14",
+        "type": "debug",
+        "z": "d900094f.ace7f8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 550,
+        "y": 100,
         "wires": []
     }
 ]
