@@ -7,23 +7,11 @@
         "info": ""
     },
     {
-        "id": "d12f49f7.adc66",
-        "type": "serial-port",
-        "serialport": "/dev/tty.usbserial-AR0JZC14",
-        "serialbaud": "115200",
-        "databits": "8",
-        "parity": "none",
-        "stopbits": "1",
-        "waitfor": "",
-        "dtr": "none",
-        "rts": "none",
-        "cts": "none",
-        "dsr": "none",
-        "newline": "\\n",
-        "bin": "false",
-        "out": "char",
-        "addchar": "",
-        "responsetimeout": "10000"
+        "id": "d900094f.ace7f8",
+        "type": "tab",
+        "label": "Custom Node Tester",
+        "disabled": false,
+        "info": ""
     },
     {
         "id": "65c610d3.c6b9",
@@ -88,6 +76,84 @@
         "x": 480,
         "y": 240,
         "wires": []
+    },
+    {
+        "id": "7c347d5.1a5be84",
+        "type": "inject",
+        "z": "d900094f.ace7f8",
+        "name": "UPPER CASE",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "TEST ME",
+        "payloadType": "str",
+        "x": 150,
+        "y": 100,
+        "wires": [
+            [
+                "9790f8a0.fcf458"
+            ]
+        ]
+    },
+    {
+        "id": "9790f8a0.fcf458",
+        "type": "lower-case",
+        "z": "d900094f.ace7f8",
+        "name": "Test",
+        "x": 330,
+        "y": 100,
+        "wires": [
+            [
+                "28e8fb72.4d2f14"
+            ]
+        ]
+    },
+    {
+        "id": "28e8fb72.4d2f14",
+        "type": "debug",
+        "z": "d900094f.ace7f8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 550,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "d12f49f7.adc66",
+        "type": "serial-port",
+        "serialport": "/dev/tty.usbserial-AR0JZC14",
+        "serialbaud": "115200",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": "10000"
     },
     {
         "id": "29b54f72.c4d198",
