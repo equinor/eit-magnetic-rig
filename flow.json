@@ -31,7 +31,8 @@
         "y": 160,
         "wires": [
             [
-                "6db26cf1.ce64ac"
+                "6db26cf1.ce64ac",
+                "a5cd142d.2fab58"
             ]
         ]
     },
@@ -47,8 +48,25 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 370,
+        "x": 490,
         "y": 160,
+        "wires": []
+    },
+    {
+        "id": "a5cd142d.2fab58",
+        "type": "debug",
+        "z": "7f063300.e79e2c",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 240,
         "wires": []
     }
 ]
