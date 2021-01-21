@@ -7,9 +7,29 @@
         "info": ""
     },
     {
+        "id": "d12f49f7.adc66",
+        "type": "serial-port",
+        "serialport": "/dev/tty.usbserial-AR0JZC14",
+        "serialbaud": "115200",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": "10000"
+    },
+    {
         "id": "65c610d3.c6b9",
         "type": "inject",
         "z": "7f063300.e79e2c",
+        "d": true,
         "name": "",
         "props": [
             {
@@ -68,5 +88,151 @@
         "x": 480,
         "y": 240,
         "wires": []
+    },
+    {
+        "id": "29b54f72.c4d198",
+        "type": "serial out",
+        "z": "7f063300.e79e2c",
+        "name": "Blackbox Controller",
+        "serial": "d12f49f7.adc66",
+        "x": 520,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "cef7fccb.477ec8",
+        "type": "inject",
+        "z": "7f063300.e79e2c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "$H",
+        "payloadType": "str",
+        "x": 290,
+        "y": 320,
+        "wires": [
+            [
+                "29b54f72.c4d198",
+                "b3bc9b36.b26108"
+            ]
+        ]
+    },
+    {
+        "id": "fd7c101f.a46128",
+        "type": "serial in",
+        "z": "7f063300.e79e2c",
+        "name": "Blackbox Controller",
+        "serial": "d12f49f7.adc66",
+        "x": 520,
+        "y": 420,
+        "wires": [
+            [
+                "d79d9389.4237e"
+            ]
+        ]
+    },
+    {
+        "id": "d79d9389.4237e",
+        "type": "debug",
+        "z": "7f063300.e79e2c",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "b3bc9b36.b26108",
+        "type": "debug",
+        "z": "7f063300.e79e2c",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 490,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "ff7d121d.21ebd8",
+        "type": "inject",
+        "z": "7f063300.e79e2c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "$J=G91 G20 X0.5 F10",
+        "payloadType": "str",
+        "x": 240,
+        "y": 380,
+        "wires": [
+            [
+                "29b54f72.c4d198",
+                "b3bc9b36.b26108"
+            ]
+        ]
+    },
+    {
+        "id": "5f9ef5f2.41238c",
+        "type": "inject",
+        "z": "7f063300.e79e2c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "$",
+        "payloadType": "str",
+        "x": 290,
+        "y": 280,
+        "wires": [
+            [
+                "29b54f72.c4d198",
+                "b3bc9b36.b26108"
+            ]
+        ]
     }
 ]
