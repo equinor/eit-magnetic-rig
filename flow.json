@@ -795,7 +795,7 @@
         "type": "ui_slider",
         "z": "7f063300.e79e2c",
         "name": "",
-        "label": "Distance",
+        "label": "Spacing (cm)",
         "tooltip": "",
         "group": "19dc6535.e7fc1b",
         "order": 1,
@@ -807,7 +807,7 @@
         "min": "1",
         "max": 10,
         "step": 1,
-        "x": 240,
+        "x": 250,
         "y": 700,
         "wires": [
             [
@@ -828,7 +828,7 @@
         "label": "",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
-        "x": 370,
+        "x": 390,
         "y": 700,
         "wires": []
     },
@@ -837,7 +837,7 @@
         "type": "ui_slider",
         "z": "7f063300.e79e2c",
         "name": "",
-        "label": "Width",
+        "label": "Width (cm)",
         "tooltip": "",
         "group": "19dc6535.e7fc1b",
         "order": 3,
@@ -849,7 +849,7 @@
         "min": "1",
         "max": "90",
         "step": 1,
-        "x": 230,
+        "x": 250,
         "y": 760,
         "wires": [
             [
@@ -870,7 +870,7 @@
         "label": "",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
-        "x": 370,
+        "x": 390,
         "y": 760,
         "wires": []
     },
@@ -886,7 +886,7 @@
         "label": "",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
-        "x": 370,
+        "x": 390,
         "y": 820,
         "wires": []
     },
@@ -895,7 +895,7 @@
         "type": "ui_slider",
         "z": "7f063300.e79e2c",
         "name": "",
-        "label": "Depth",
+        "label": "Depth (cm)",
         "tooltip": "",
         "group": "19dc6535.e7fc1b",
         "order": 5,
@@ -907,7 +907,7 @@
         "min": "1",
         "max": "77",
         "step": 1,
-        "x": 230,
+        "x": 250,
         "y": 820,
         "wires": [
             [
@@ -928,7 +928,7 @@
         "label": "",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
-        "x": 370,
+        "x": 390,
         "y": 880,
         "wires": []
     },
@@ -937,7 +937,7 @@
         "type": "ui_slider",
         "z": "7f063300.e79e2c",
         "name": "",
-        "label": "Height",
+        "label": "Height (cm)",
         "tooltip": "",
         "group": "19dc6535.e7fc1b",
         "order": 7,
@@ -949,7 +949,7 @@
         "min": "1",
         "max": "22",
         "step": 1,
-        "x": 230,
+        "x": 250,
         "y": 880,
         "wires": [
             [
@@ -970,7 +970,7 @@
         "label": "",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
-        "x": 370,
+        "x": 390,
         "y": 940,
         "wires": []
     },
@@ -979,7 +979,7 @@
         "type": "ui_slider",
         "z": "7f063300.e79e2c",
         "name": "",
-        "label": "Wait",
+        "label": "Wait (s)",
         "tooltip": "",
         "group": "19dc6535.e7fc1b",
         "order": 7,
@@ -991,7 +991,7 @@
         "min": "0",
         "max": "10",
         "step": 1,
-        "x": 230,
+        "x": 240,
         "y": 940,
         "wires": [
             [
@@ -1012,7 +1012,7 @@
         "label": "",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
-        "x": 370,
+        "x": 390,
         "y": 1000,
         "wires": []
     },
@@ -1054,7 +1054,7 @@
         "label": "No. of samples",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
-        "x": 760,
+        "x": 780,
         "y": 860,
         "wires": []
     },
@@ -1070,7 +1070,7 @@
         "label": "Estimated duration (h)",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
-        "x": 780,
+        "x": 800,
         "y": 920,
         "wires": []
     },
@@ -1084,7 +1084,7 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 600,
+        "x": 620,
         "y": 860,
         "wires": [
             [
@@ -1103,7 +1103,7 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 600,
+        "x": 620,
         "y": 920,
         "wires": [
             [
@@ -1150,7 +1150,7 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 380,
+        "x": 400,
         "y": 800,
         "wires": [
             [
@@ -1168,7 +1168,7 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 380,
+        "x": 400,
         "y": 860,
         "wires": [
             [
@@ -1186,7 +1186,7 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 380,
+        "x": 400,
         "y": 920,
         "wires": [
             [
@@ -1204,7 +1204,7 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 380,
+        "x": 400,
         "y": 740,
         "wires": [
             []
@@ -1220,7 +1220,7 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 380,
+        "x": 400,
         "y": 980,
         "wires": [
             [
@@ -1238,7 +1238,7 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 380,
+        "x": 400,
         "y": 1040,
         "wires": [
             [
@@ -1851,6 +1851,35 @@
         "wires": [
             [
                 "4559db5b.06c2dc"
+            ]
+        ]
+    },
+    {
+        "id": "170ec5f9.716c0a",
+        "type": "inject",
+        "z": "7f063300.e79e2c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 90,
+        "y": 700,
+        "wires": [
+            [
+                "e308b1a3.667b88"
             ]
         ]
     }

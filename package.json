@@ -4,7 +4,8 @@
     "version": "0.0.1",
     "dependencies": {
         "node-red-node-serialport": "0.11.1",
-        "nodes": "file:projects/eit-magnetic-rig/nodes"
+        "nodes": "file:projects/eit-magnetic-rig/nodes",
+        "node-red-dashboard": "2.27.0"
     },
     "node-red": {
         "settings": {
