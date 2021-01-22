@@ -1882,5 +1882,111 @@
                 "e308b1a3.667b88"
             ]
         ]
+    },
+    {
+        "id": "1e63a250.aa89ce",
+        "type": "parse-status",
+        "z": "d900094f.ace7f8",
+        "name": "",
+        "x": 370,
+        "y": 200,
+        "wires": [
+            [
+                "aac88861.e8dbf8"
+            ],
+            [
+                "50fb7f6.ce6138"
+            ]
+        ]
+    },
+    {
+        "id": "50fb7f6.ce6138",
+        "type": "debug",
+        "z": "d900094f.ace7f8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "aac88861.e8dbf8",
+        "type": "debug",
+        "z": "d900094f.ace7f8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "fe371197.e4108",
+        "type": "inject",
+        "z": "d900094f.ace7f8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "ok",
+        "payloadType": "str",
+        "x": 130,
+        "y": 180,
+        "wires": [
+            [
+                "1e63a250.aa89ce"
+            ]
+        ]
+    },
+    {
+        "id": "8f560944.167318",
+        "type": "inject",
+        "z": "d900094f.ace7f8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "<Idle|MPos:0.000,-10.000,5.000|WCO:0.000,1.551,5.664|Bf:15,128>",
+        "payloadType": "str",
+        "x": 130,
+        "y": 240,
+        "wires": [
+            [
+                "1e63a250.aa89ce"
+            ]
+        ]
     }
 ]
