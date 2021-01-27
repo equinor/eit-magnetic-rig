@@ -5,7 +5,9 @@
     "dependencies": {
         "node-red-node-serialport": "0.11.1",
         "nodes": "file:projects/eit-magnetic-rig/nodes",
-        "node-red-dashboard": "2.27.0"
+        "node-red-dashboard": "2.27.0",
+        "node-red-contrib-ui-value-trail": "0.2.1",
+        "node-red-contrib-queue-gate": "1.5.2"
     },
     "node-red": {
         "settings": {
