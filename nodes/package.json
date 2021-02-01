@@ -8,10 +8,13 @@
   },
   "author": "",
   "license": "ISC",
-  "node-red" : {
+  "node-red": {
     "nodes": {
-        "lower-case": "lower-case.js",
-        "parse-status": "parse-status.js"
+      "lower-case": "lower-case.js",
+      "parse-status": "parse-status.js"
     }
+  },
+  "dependencies": {
+    "polycrc": "^1.0.1"
   }
 }
