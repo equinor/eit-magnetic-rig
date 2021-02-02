@@ -1,7 +1,7 @@
 const net = require('net');
 const polycrc = require('polycrc');
 
-const crc16 = polycrc.crc(16, 0xa001, 0xffff, 0x0000, false);
+const crc16 = polycrc.crc(16, 0xa001, 0xffff);
 
 
 function main() {
@@ -13,20 +13,24 @@ function main() {
     socket.on("connect", () => {
         console.log("connected");
 
-        var buffer = new ArrayBuffer(8);
+        var buffer = new ArrayBuffer(9);
         let view = new DataView(buffer);
         view.setUint8(0, 0x02); // Start of message
         view.setUint8(1, 0x00); // Address
-        view.setUint8(2, "H".charCodeAt(0)); // Command identification
-        view.setUint8(3, "P".charCodeAt(0));
-        view.setUint8(4, 0x01); // Data Length
-        view.setUint8(5, 0x00);
-        console.log(crc16(buffer.slice(0,6)));
-        view.setUint16(6, crc16(buffer.slice(0,6)));
+        view.setUint8(2, 0x48); // Command identification
+        view.setUint8(3, 0x53);
+        view.setUint8(4, 0x02); // Data Length
+        view.setUint8(5, 0x01);
+        view.setUint8(6, 0x02);
+        console.log(crc16(buffer.slice(0,7)));
+
+        let buff2 = buffer.slice(0,7);
+        new Uint8Array(buff2).reverse();
+        view.setUint16(7, polycrc.crc16(buffer.slice(0,7)));
 
         console.log(buffer);
 
-        console.log(socket.write(new Uint8Array(buffer)));
+        //console.log(socket.write(new Uint8Array(buffer)));
     });
 
     socket.on("data", (data) => {
