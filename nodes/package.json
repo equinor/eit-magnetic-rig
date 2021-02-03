@@ -15,6 +15,6 @@
     }
   },
   "dependencies": {
-    "polycrc": "^1.0.1"
+    "homing": "file:homing"
   }
 }
