@@ -3789,7 +3789,7 @@
         "outs": "all",
         "topic": "",
         "min": "0",
-        "max": "244",
+        "max": "225",
         "step": 1,
         "x": 230,
         "y": 160,
@@ -5244,6 +5244,94 @@
         "wires": [
             [
                 "6b906498.dbca9c"
+            ]
+        ]
+    },
+    {
+        "id": "c3a236d1.d520e8",
+        "type": "magnetic-sensors",
+        "z": "d900094f.ace7f8",
+        "name": "",
+        "x": 370,
+        "y": 320,
+        "wires": [
+            [
+                "e90480fd.5c164"
+            ]
+        ]
+    },
+    {
+        "id": "e90480fd.5c164",
+        "type": "debug",
+        "z": "d900094f.ace7f8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 570,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "fd3c566.97038a8",
+        "type": "inject",
+        "z": "d900094f.ace7f8",
+        "name": "1sec",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "10",
+        "payloadType": "num",
+        "x": 140,
+        "y": 320,
+        "wires": [
+            [
+                "c3a236d1.d520e8"
+            ]
+        ]
+    },
+    {
+        "id": "bd5414b7.48f068",
+        "type": "inject",
+        "z": "d900094f.ace7f8",
+        "name": "Off",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 140,
+        "y": 380,
+        "wires": [
+            [
+                "c3a236d1.d520e8"
             ]
         ]
     }

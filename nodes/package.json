@@ -8,10 +8,14 @@
   },
   "author": "",
   "license": "ISC",
-  "node-red" : {
+  "node-red": {
     "nodes": {
-        "lower-case": "lower-case.js",
-        "parse-status": "parse-status.js"
+      "lower-case": "lower-case.js",
+      "parse-status": "parse-status.js",
+      "magnetic-sensors": "magnetic-sensors.js"
     }
+  },
+  "dependencies": {
+    "homing": "file:homing"
   }
 }
