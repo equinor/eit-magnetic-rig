@@ -35,6 +35,13 @@
         "info": ""
     },
     {
+        "id": "3f31bec0.a9e20a",
+        "type": "tab",
+        "label": "Testing",
+        "disabled": false,
+        "info": ""
+    },
+    {
         "id": "d12f49f7.adc66",
         "type": "serial-port",
         "serialport": "/dev/tty.usbserial-AR0JZC14",
@@ -160,7 +167,7 @@
     {
         "id": "428976bf.20c0c",
         "type": "ui_group",
-        "name": "Controls",
+        "name": "Homing & control",
         "tab": "ec2c78e7.48ac68",
         "order": 1,
         "disp": true,
@@ -293,15 +300,6 @@
         "name": "spacer",
         "group": "428976bf.20c0c",
         "order": 15,
-        "width": "6",
-        "height": 1
-    },
-    {
-        "id": "36fe1a32.485156",
-        "type": "ui_spacer",
-        "name": "spacer",
-        "group": "19dc6535.e7fc1b",
-        "order": 18,
         "width": "6",
         "height": 1
     },
@@ -1382,7 +1380,7 @@
         "max": "90",
         "step": 1,
         "x": 250,
-        "y": 140,
+        "y": 200,
         "wires": [
             [
                 "bdfe4bda.235048",
@@ -1403,7 +1401,7 @@
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "x": 410,
-        "y": 140,
+        "y": 200,
         "wires": []
     },
     {
@@ -1419,7 +1417,7 @@
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "x": 410,
-        "y": 200,
+        "y": 260,
         "wires": []
     },
     {
@@ -1440,7 +1438,7 @@
         "max": "90",
         "step": 1,
         "x": 250,
-        "y": 200,
+        "y": 260,
         "wires": [
             [
                 "563fe7ed.1a862",
@@ -1461,7 +1459,7 @@
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "x": 410,
-        "y": 260,
+        "y": 320,
         "wires": []
     },
     {
@@ -1482,7 +1480,7 @@
         "max": "24",
         "step": 1,
         "x": 250,
-        "y": 260,
+        "y": 320,
         "wires": [
             [
                 "b80c902f.f859d8",
@@ -1503,7 +1501,7 @@
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "x": 410,
-        "y": 380,
+        "y": 440,
         "wires": []
     },
     {
@@ -1524,7 +1522,7 @@
         "max": "10",
         "step": 1,
         "x": 260,
-        "y": 380,
+        "y": 440,
         "wires": [
             [
                 "f92f09e6.568608",
@@ -1545,7 +1543,7 @@
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "x": 410,
-        "y": 440,
+        "y": 500,
         "wires": []
     },
     {
@@ -1566,7 +1564,7 @@
         "max": "10",
         "step": 1,
         "x": 260,
-        "y": 440,
+        "y": 500,
         "wires": [
             [
                 "9c5b9de5.3823e",
@@ -1587,7 +1585,7 @@
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "x": 960,
-        "y": 240,
+        "y": 300,
         "wires": []
     },
     {
@@ -1603,7 +1601,7 @@
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "x": 1000,
-        "y": 300,
+        "y": 360,
         "wires": []
     },
     {
@@ -1617,7 +1615,7 @@
         "initialize": "",
         "finalize": "",
         "x": 800,
-        "y": 180,
+        "y": 240,
         "wires": [
             [
                 "2c257bfc.b3892c"
@@ -1639,7 +1637,7 @@
         "initialize": "",
         "finalize": "",
         "x": 800,
-        "y": 300,
+        "y": 360,
         "wires": [
             [
                 "844f603d.839028"
@@ -1668,7 +1666,7 @@
         "payload": "40",
         "payloadType": "num",
         "x": 90,
-        "y": 200,
+        "y": 260,
         "wires": [
             [
                 "20295fc.637fd2"
@@ -1686,7 +1684,7 @@
         "initialize": "",
         "finalize": "",
         "x": 540,
-        "y": 140,
+        "y": 200,
         "wires": [
             [
                 "1e74c5b9.cf98a2"
@@ -1704,7 +1702,7 @@
         "initialize": "",
         "finalize": "",
         "x": 540,
-        "y": 200,
+        "y": 260,
         "wires": [
             [
                 "1e74c5b9.cf98a2"
@@ -1722,7 +1720,7 @@
         "initialize": "",
         "finalize": "",
         "x": 540,
-        "y": 260,
+        "y": 320,
         "wires": [
             [
                 "1e74c5b9.cf98a2"
@@ -1734,7 +1732,7 @@
         "type": "function",
         "z": "3ac44c2f.c95524",
         "name": "",
-        "func": "var value = msg.payload;\nglobal.set('spacing', value);\nreturn msg;",
+        "func": "var value = msg.payload;\nglobal.set('mappingMode', value);\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1742,9 +1740,7 @@
         "x": 540,
         "y": 80,
         "wires": [
-            [
-                "1e74c5b9.cf98a2"
-            ]
+            []
         ]
     },
     {
@@ -1758,7 +1754,7 @@
         "initialize": "",
         "finalize": "",
         "x": 540,
-        "y": 380,
+        "y": 440,
         "wires": [
             [
                 "46cfb820.6425a"
@@ -1776,7 +1772,7 @@
         "initialize": "",
         "finalize": "",
         "x": 540,
-        "y": 440,
+        "y": 500,
         "wires": [
             [
                 "46cfb820.6425a"
@@ -1805,7 +1801,7 @@
         "payload": "24",
         "payloadType": "num",
         "x": 90,
-        "y": 260,
+        "y": 320,
         "wires": [
             [
                 "5a419d7c.d81d8c"
@@ -1834,7 +1830,7 @@
         "payload": "40",
         "payloadType": "num",
         "x": 90,
-        "y": 140,
+        "y": 200,
         "wires": [
             [
                 "319af572.52139a"
@@ -1863,7 +1859,7 @@
         "payload": "2",
         "payloadType": "num",
         "x": 90,
-        "y": 380,
+        "y": 440,
         "wires": [
             [
                 "4d9010.a25cfff"
@@ -1892,7 +1888,7 @@
         "payload": "3",
         "payloadType": "num",
         "x": 90,
-        "y": 440,
+        "y": 500,
         "wires": [
             [
                 "16a215b4.36ea32"
@@ -1903,9 +1899,9 @@
         "id": "b906f47d.43c948",
         "type": "comment",
         "z": "3ac44c2f.c95524",
-        "name": "Config",
+        "name": "Mapping config",
         "info": "",
-        "x": 90,
+        "x": 120,
         "y": 40,
         "wires": []
     },
@@ -1951,7 +1947,7 @@
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "x": 950,
-        "y": 180,
+        "y": 240,
         "wires": []
     },
     {
@@ -1959,7 +1955,7 @@
         "type": "ui_dropdown",
         "z": "3ac44c2f.c95524",
         "name": "",
-        "label": "Spacing (cm)",
+        "label": "Mode",
         "tooltip": "",
         "place": "Select option",
         "group": "19dc6535.e7fc1b",
@@ -1970,390 +1966,24 @@
         "multiple": false,
         "options": [
             {
-                "label": "0.5 cm",
-                "value": 0.5,
-                "type": "num"
-            },
-            {
-                "label": "1 cm",
+                "label": "Grid",
                 "value": "1",
                 "type": "str"
             },
             {
-                "label": "2 cm",
-                "value": "2",
-                "type": "str"
+                "label": "Continous (X axis)",
+                "value": 2,
+                "type": "num"
             }
         ],
         "payload": "",
         "topic": "",
-        "x": 250,
+        "x": 230,
         "y": 80,
         "wires": [
             [
                 "f12d9a91.89638"
             ]
-        ]
-    },
-    {
-        "id": "9a33f283.790538",
-        "type": "ui_chart",
-        "z": "6108fa1d.d7726c",
-        "name": "",
-        "group": "591df4c.3244c0c",
-        "order": 13,
-        "width": "6",
-        "height": "6",
-        "label": "chart",
-        "chartType": "radar",
-        "legend": "false",
-        "xformat": "HH:mm:ss",
-        "interpolate": "linear",
-        "nodata": "",
-        "dot": false,
-        "ymin": "0",
-        "ymax": "99",
-        "removeOlder": 1,
-        "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
-        "cutout": 0,
-        "useOneColor": false,
-        "useUTC": false,
-        "colors": [
-            "#1f77b4",
-            "#aec7e8",
-            "#ff7f0e",
-            "#2ca02c",
-            "#98df8a",
-            "#d62728",
-            "#ff9896",
-            "#9467bd",
-            "#c5b0d5"
-        ],
-        "outputs": 1,
-        "useDifferentColor": false,
-        "x": 490,
-        "y": 200,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "186ab9c3.a6fd76",
-        "type": "ui_valuetrail",
-        "z": "6108fa1d.d7726c",
-        "group": "591df4c.3244c0c",
-        "order": 6,
-        "width": "9",
-        "height": "1",
-        "name": "Sensor A",
-        "label": "",
-        "unit": "",
-        "blur": false,
-        "minmax": false,
-        "showvalue": false,
-        "decimals": 0,
-        "colorLine": "#ff9900",
-        "colorFromTheme": false,
-        "stroke": 2,
-        "property": "payload",
-        "pointcount": 8,
-        "x": 640,
-        "y": 40,
-        "wires": []
-    },
-    {
-        "id": "1cd14089.60d497",
-        "type": "ui_text",
-        "z": "6108fa1d.d7726c",
-        "group": "591df4c.3244c0c",
-        "order": 5,
-        "width": "3",
-        "height": "1",
-        "name": "",
-        "label": "Sensor A",
-        "format": "{{msg.payload}}",
-        "layout": "row-spread",
-        "x": 500,
-        "y": 40,
-        "wires": []
-    },
-    {
-        "id": "20a12810.ebdae",
-        "type": "ui_text",
-        "z": "6108fa1d.d7726c",
-        "group": "591df4c.3244c0c",
-        "order": 7,
-        "width": "3",
-        "height": "1",
-        "name": "",
-        "label": "Sensor B",
-        "format": "{{msg.payload}}",
-        "layout": "row-spread",
-        "x": 500,
-        "y": 80,
-        "wires": []
-    },
-    {
-        "id": "9bd22b71.146418",
-        "type": "ui_valuetrail",
-        "z": "6108fa1d.d7726c",
-        "group": "591df4c.3244c0c",
-        "order": 8,
-        "width": "9",
-        "height": "1",
-        "name": "Sensor B",
-        "label": "",
-        "unit": "",
-        "blur": false,
-        "minmax": false,
-        "showvalue": false,
-        "decimals": 0,
-        "colorLine": "#00fa00",
-        "colorFromTheme": false,
-        "stroke": 2,
-        "property": "payload",
-        "pointcount": 8,
-        "x": 640,
-        "y": 80,
-        "wires": []
-    },
-    {
-        "id": "e79d220b.ffb768",
-        "type": "ui_text",
-        "z": "6108fa1d.d7726c",
-        "group": "591df4c.3244c0c",
-        "order": 9,
-        "width": "3",
-        "height": "1",
-        "name": "",
-        "label": "Sensor C",
-        "format": "{{msg.payload}}",
-        "layout": "row-spread",
-        "x": 500,
-        "y": 120,
-        "wires": []
-    },
-    {
-        "id": "908c49f8.e5aff8",
-        "type": "ui_valuetrail",
-        "z": "6108fa1d.d7726c",
-        "group": "591df4c.3244c0c",
-        "order": 10,
-        "width": "9",
-        "height": "1",
-        "name": "Sensor C",
-        "label": "",
-        "unit": "",
-        "blur": false,
-        "minmax": false,
-        "showvalue": false,
-        "decimals": 0,
-        "colorLine": "#0432ff",
-        "colorFromTheme": false,
-        "stroke": 2,
-        "property": "payload",
-        "pointcount": 8,
-        "x": 640,
-        "y": 120,
-        "wires": []
-    },
-    {
-        "id": "15c3807.16b3a",
-        "type": "ui_text",
-        "z": "6108fa1d.d7726c",
-        "group": "591df4c.3244c0c",
-        "order": 11,
-        "width": "3",
-        "height": "1",
-        "name": "",
-        "label": "Sensor Z",
-        "format": "{{msg.payload}}",
-        "layout": "row-spread",
-        "x": 500,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "e1215499.8bbe08",
-        "type": "ui_valuetrail",
-        "z": "6108fa1d.d7726c",
-        "group": "591df4c.3244c0c",
-        "order": 12,
-        "width": "9",
-        "height": "1",
-        "name": "Sensor Z",
-        "label": "",
-        "unit": "",
-        "blur": false,
-        "minmax": false,
-        "showvalue": false,
-        "decimals": 0,
-        "colorLine": "#ff40ff",
-        "colorFromTheme": false,
-        "stroke": 2,
-        "property": "payload",
-        "pointcount": 8,
-        "x": 640,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "630dcc11.4f9114",
-        "type": "inject",
-        "z": "6108fa1d.d7726c",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "1",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 110,
-        "y": 60,
-        "wires": [
-            [
-                "9eba5930.fb3ec"
-            ]
-        ]
-    },
-    {
-        "id": "9eba5930.fb3ec",
-        "type": "function",
-        "z": "6108fa1d.d7726c",
-        "name": "Random sensor data",
-        "func": "var msg1 = {};\nvar msg2 = {};\nvar msg3 = {};\nvar msg4 = {};\n\nmsg1.payload = Math.round(Math.random()*25);\nmsg1.topic = \"Sensor A\";\n\nmsg2.payload = (Math.round(Math.random()*25)+25);\nmsg2.topic = \"Sensor B\";\n\nmsg3.payload = (Math.round(Math.random()*25)+50);\nmsg3.topic = \"Sensor C\";\n\nmsg4.payload = (Math.round(Math.random()*25)+75);\nmsg4.topic = \"Sensor Z\";\n\nreturn [msg1, msg2, msg3, msg4];",
-        "outputs": 4,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 300,
-        "y": 60,
-        "wires": [
-            [
-                "9a33f283.790538",
-                "eb6f915c.e04a9",
-                "5fc3b213.e492dc",
-                "1cd14089.60d497",
-                "186ab9c3.a6fd76"
-            ],
-            [
-                "9a33f283.790538",
-                "eb6f915c.e04a9",
-                "5fc3b213.e492dc",
-                "20a12810.ebdae",
-                "9bd22b71.146418"
-            ],
-            [
-                "9a33f283.790538",
-                "eb6f915c.e04a9",
-                "5fc3b213.e492dc",
-                "e79d220b.ffb768",
-                "908c49f8.e5aff8"
-            ],
-            [
-                "9a33f283.790538",
-                "eb6f915c.e04a9",
-                "5fc3b213.e492dc",
-                "15c3807.16b3a",
-                "e1215499.8bbe08"
-            ]
-        ]
-    },
-    {
-        "id": "eb6f915c.e04a9",
-        "type": "ui_chart",
-        "z": "6108fa1d.d7726c",
-        "name": "",
-        "group": "591df4c.3244c0c",
-        "order": 14,
-        "width": "6",
-        "height": "6",
-        "label": "chart",
-        "chartType": "polar-area",
-        "legend": "false",
-        "xformat": "HH:mm:ss",
-        "interpolate": "linear",
-        "nodata": "",
-        "dot": false,
-        "ymin": "0",
-        "ymax": "99",
-        "removeOlder": 1,
-        "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
-        "cutout": 0,
-        "useOneColor": false,
-        "useUTC": false,
-        "colors": [
-            "#1f77b4",
-            "#aec7e8",
-            "#ff7f0e",
-            "#2ca02c",
-            "#98df8a",
-            "#d62728",
-            "#ff9896",
-            "#9467bd",
-            "#c5b0d5"
-        ],
-        "outputs": 1,
-        "useDifferentColor": false,
-        "x": 490,
-        "y": 240,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "5fc3b213.e492dc",
-        "type": "ui_chart",
-        "z": "6108fa1d.d7726c",
-        "name": "",
-        "group": "f9aacf92.64234",
-        "order": 10,
-        "width": "12",
-        "height": "6",
-        "label": "Sensor data",
-        "chartType": "line",
-        "legend": "true",
-        "xformat": "auto",
-        "interpolate": "linear",
-        "nodata": "",
-        "dot": false,
-        "ymin": "0",
-        "ymax": "99",
-        "removeOlder": 1,
-        "removeOlderPoints": "180",
-        "removeOlderUnit": "3600",
-        "cutout": 0,
-        "useOneColor": false,
-        "useUTC": false,
-        "colors": [
-            "#1f77b4",
-            "#aec7e8",
-            "#ff7f0e",
-            "#2ca02c",
-            "#98df8a",
-            "#d62728",
-            "#ff9896",
-            "#9467bd",
-            "#c5b0d5"
-        ],
-        "outputs": 1,
-        "useDifferentColor": false,
-        "x": 510,
-        "y": 280,
-        "wires": [
-            []
         ]
     },
     {
@@ -2372,7 +2002,7 @@
         "include_empty_strings": true,
         "include_null_values": true,
         "x": 650,
-        "y": 1180,
+        "y": 780,
         "wires": [
             [
                 "af3be035.37dec",
@@ -2394,7 +2024,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 930,
-        "y": 1180,
+        "y": 780,
         "wires": []
     },
     {
@@ -2413,7 +2043,7 @@
         "delay": 300,
         "topic": "",
         "x": 780,
-        "y": 1220,
+        "y": 820,
         "wires": [
             []
         ]
@@ -2429,7 +2059,7 @@
         "initialize": "",
         "finalize": "",
         "x": 520,
-        "y": 1180,
+        "y": 780,
         "wires": [
             [
                 "a808b362.6aa43",
@@ -2459,7 +2089,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 100,
-        "y": 1180,
+        "y": 780,
         "wires": [
             [
                 "92d46271.6d6d38"
@@ -2478,7 +2108,7 @@
         "stream": false,
         "addname": "",
         "x": 390,
-        "y": 1180,
+        "y": 780,
         "wires": [
             [
                 "d28e8ad4.4282f"
@@ -2496,7 +2126,7 @@
         "initialize": "",
         "finalize": "",
         "x": 260,
-        "y": 1180,
+        "y": 780,
         "wires": [
             [
                 "c0630450.9f4ba8"
@@ -2514,7 +2144,7 @@
         "overwriteFile": "false",
         "encoding": "none",
         "x": 790,
-        "y": 1180,
+        "y": 780,
         "wires": [
             [
                 "ba658e1b.1b204"
@@ -2559,7 +2189,7 @@
         "outputs": 1,
         "useDifferentColor": false,
         "x": 1010,
-        "y": 1280,
+        "y": 880,
         "wires": [
             []
         ]
@@ -2575,7 +2205,7 @@
         "initialize": "",
         "finalize": "",
         "x": 840,
-        "y": 1280,
+        "y": 880,
         "wires": [
             [
                 "b3f11242.407658"
@@ -2607,7 +2237,7 @@
         "randomUnits": "seconds",
         "drop": false,
         "x": 680,
-        "y": 1280,
+        "y": 880,
         "wires": [
             [
                 "62063e95.69118"
@@ -2619,21 +2249,19 @@
         "type": "function",
         "z": "6108fa1d.d7726c",
         "name": "Generate gcode",
-        "func": "var width=global.get('width') || 1;\nvar depth=global.get('depth') || 1;\nvar height=global.get('height') || 1;\nvar sampleNumber=global.get('sampleNumber') || 0;\nvar feed=global.get('feed') || 100;\nvar spacing=global.get('spacing') || 1;\nvar origoX=global.get('origoX') || 600;\nvar origoY=global.get('origoY') || 300;\nvar origoZ=global.get('origoZ') || 225;\nvar xStartPos=origoX - (width*spacing*10)/2;\nvar yStartPos=origoY - (depth*spacing*10)/2;\nvar zStartPos=origoZ - (height*spacing*10) + 10;\nvar xPos=0;\nvar yPos=0;\nvar zPos=0;\nvar sample = global.get('sample');\nvar timestamp = global.get('timestamp') || 0;\nvar gcode=\"\";\nvar msg1 = {};\nvar msg2 = {};\nvar msg3 = {};\n\n//\n// Move rig to starting position and wait\n//\n\nxPos=xStartPos;\nyPos=yStartPos;\nzPos=zStartPos;\n\nfor (var z=0; z<height; z++) {\n    for (var y=0; y<depth; y++) {\n        for (var x=0; x<width; x++) {\n            ++sampleNumber;\n            global.set('sampleNumber', sampleNumber);\n            xPos = xStartPos + (x*spacing*10);\n            gcode=\"$J=G90G21X\"+ xPos + \"Y\"+ yPos + \"Z-\"+ zPos + \"F\"+feed;\n            msg1.payload = gcode;\n            msg2.timestamp = global.get('timestamp');\n            msg2.payload = [global.get('sampleNumber'), xPos];\n// Beware: mismatch between expected and actual sent timestamp and sampleNumber \n// Due to the different way Javascript/Node-Red behaves vs c++... Bugger...\n            node.send([msg1,msg2,[]]);\n//\n// Wait for sample aquisition\n//\n\n//            setTimeout(function(){\n//                \n//                msg2.payload = 'ping';\n//                node.send([[],msg2]);\n//            }, 3000);\n\n// Add sample data to global Samples array\n\n        }\n        yPos = yStartPos + 10 + (y*spacing*10);\n//        gcode=\"$J=G90G21X\"+ xPos + \"Y\"+ yPos + \"Z-\"+ zPos + \"F\"+feed;\n//        msg1.payload = gcode;\n//        node.send([msg1,[],[]]);\n    }\n    zPos = zStartPos + 10 + (z*spacing*10);\n//    gcode=\"$J=G90G21X\"+ xPos + \"Y\"+ yPos + \"Z-\"+ zPos + \"F\"+feed;\n//    msg1.payload = gcode;\n//    node.send([msg1,[],[]]);\n    \n// Append current layer saved in the global Samples array to a CSV file\n    msg3.payload = true;\n    node.send([[],[],msg3]);\n    \n}\nglobal.set('sampleNumber', 0);\nglobal.set('noOfSamples', width*depth*height);\n\nreturn null;",
+        "func": "var width=global.get('width') || 1;\nvar depth=global.get('depth') || 1;\nvar height=global.get('height') || 1;\n//var sampleNumber=global.get('sampleNumber') || 0;\nvar feed=global.get('feed') || 100;\nvar spacing=global.get('spacing') || 1;\nvar origoX=global.get('origoX') || 600;\nvar origoY=global.get('origoY') || 300;\nvar origoZ=global.get('origoZ') || 225;\nvar xStartPos=origoX - (width*spacing*10)/2;\nvar yStartPos=origoY - (depth*spacing*10)/2;\nvar zStartPos=origoZ - (height*spacing*10) + 10;\nvar xPos=0;\nvar yPos=0;\nvar zPos=0;\n//var sample = global.get('sample');\n//var timestamp = global.get('timestamp') || 0;\nvar gcode=\"\";\nvar msg1 = {};\nvar msg2 = {};\nvar msg3 = {};\n\n//\n// Move rig to starting position and wait\n//\n\nxPos=xStartPos;\nyPos=yStartPos;\nzPos=zStartPos;\n\nfor (var z=0; z<height; z++) {\n    for (var y=0; y<depth; y++) {\n        for (var x=0; x<width; x++) {\n//            ++sampleNumber;\n//            global.set('sampleNumber', sampleNumber);\n            xPos = xStartPos + (x*spacing*10);\n            gcode=\"$J=G90G21X\"+ xPos + \"Y\"+ yPos + \"Z-\"+ zPos + \"F\"+feed;\n            msg1.payload = gcode;\n//            msg2.timestamp = global.get('timestamp');\n            msg2.payload = [global.get('sampleNumber'), xPos];\n// Beware: mismatch between expected and actual sent timestamp and sampleNumber \n// Due to the different way Javascript/Node-Red behaves vs c++... Bugger...\n            node.send([msg1,msg2,[]]);\n//\n// Wait for sample aquisition\n//\n\n// Add sample data to global Samples array\n\n        }\n        yPos = yStartPos + 10 + (y*spacing*10);\n//        gcode=\"$J=G90G21X\"+ xPos + \"Y\"+ yPos + \"Z-\"+ zPos + \"F\"+feed;\n//        msg1.payload = gcode;\n//        node.send([msg1,[],[]]);\n    }\n    zPos = zStartPos + 10 + (z*spacing*10);\n//    gcode=\"$J=G90G21X\"+ xPos + \"Y\"+ yPos + \"Z-\"+ zPos + \"F\"+feed;\n//    msg1.payload = gcode;\n//    node.send([msg1,[],[]]);\n    \n// Append current layer saved in the global Samples array to a CSV file\n//    msg3.payload = true;\n//    node.send([[],[],msg3]);\n    \n}\n//global.set('sampleNumber', 0);\n//global.set('noOfSamples', width*depth*height);\n\nreturn null;",
         "outputs": 3,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "x": 280,
-        "y": 500,
+        "y": 100,
         "wires": [
             [
                 "6a5a4551.de6ba4"
             ],
             [],
-            [
-                "92d46271.6d6d38"
-            ]
+            []
         ]
     },
     {
@@ -2658,7 +2286,7 @@
         "payload": "true",
         "payloadType": "bool",
         "x": 90,
-        "y": 520,
+        "y": 120,
         "wires": [
             [
                 "3a0715a6.cd3b7a"
@@ -2723,17 +2351,17 @@
         "name": "Create mapping gcode",
         "info": "",
         "x": 120,
-        "y": 440,
+        "y": 40,
         "wires": []
     },
     {
         "id": "a0f43248.2ebbb8",
         "type": "comment",
         "z": "6108fa1d.d7726c",
-        "name": "Append Samples to CSV file and graph",
+        "name": "Depreciated - Append Samples to CSV file and graph",
         "info": "",
-        "x": 170,
-        "y": 1140,
+        "x": 220,
+        "y": 740,
         "wires": []
     },
     {
@@ -2824,10 +2452,10 @@
         "filename": "mapping.gcode",
         "appendNewline": true,
         "createDir": false,
-        "overwriteFile": "true",
+        "overwriteFile": "false",
         "encoding": "none",
         "x": 900,
-        "y": 680,
+        "y": 280,
         "wires": [
             []
         ]
@@ -2854,7 +2482,7 @@
         "payload": "<Idle|WPos:100.000,0.000,0.000|FS:0,0>",
         "payloadType": "str",
         "x": 90,
-        "y": 720,
+        "y": 320,
         "wires": [
             [
                 "9fce6ec5.b3a0d"
@@ -2883,7 +2511,7 @@
         "payload": "<Jog|WPos:100.000,0.000,0.000|FS:0,0>",
         "payloadType": "str",
         "x": 90,
-        "y": 760,
+        "y": 360,
         "wires": [
             [
                 "9fce6ec5.b3a0d"
@@ -2912,7 +2540,7 @@
         "payload": "<Run|WPos:123.000,321.000,225.000|FS:0,0>",
         "payloadType": "str",
         "x": 90,
-        "y": 800,
+        "y": 400,
         "wires": [
             [
                 "9fce6ec5.b3a0d"
@@ -2925,7 +2553,7 @@
         "z": "6108fa1d.d7726c",
         "name": "",
         "x": 530,
-        "y": 720,
+        "y": 320,
         "wires": [
             [
                 "f4f821ea.7015f8",
@@ -2951,7 +2579,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 710,
-        "y": 700,
+        "y": 300,
         "wires": []
     },
     {
@@ -2976,7 +2604,7 @@
         "payload": "Error:15",
         "payloadType": "str",
         "x": 90,
-        "y": 680,
+        "y": 280,
         "wires": [
             [
                 "9fce6ec5.b3a0d"
@@ -3005,7 +2633,7 @@
         "payload": "Ok",
         "payloadType": "str",
         "x": 90,
-        "y": 640,
+        "y": 240,
         "wires": [
             [
                 "9fce6ec5.b3a0d"
@@ -3038,7 +2666,7 @@
         "repair": false,
         "outputs": 3,
         "x": 270,
-        "y": 680,
+        "y": 280,
         "wires": [
             [
                 "b7c442b7.9c023"
@@ -3073,7 +2701,7 @@
         "to": "",
         "reg": false,
         "x": 530,
-        "y": 680,
+        "y": 280,
         "wires": [
             [
                 "f4f821ea.7015f8"
@@ -3104,7 +2732,7 @@
         "persist": false,
         "storeName": "memory",
         "x": 710,
-        "y": 640,
+        "y": 240,
         "wires": [
             [
                 "49289952.0e04a",
@@ -3122,7 +2750,7 @@
             "38d25aa3.d6580e"
         ],
         "x": 835,
-        "y": 640,
+        "y": 240,
         "wires": []
     },
     {
@@ -3152,7 +2780,7 @@
         "to": "",
         "reg": false,
         "x": 540,
-        "y": 640,
+        "y": 240,
         "wires": [
             [
                 "6a5a4551.de6ba4"
@@ -3180,7 +2808,7 @@
             "a6cc3eb3.69cf18"
         ],
         "x": 115,
-        "y": 840,
+        "y": 440,
         "wires": [
             [
                 "9fce6ec5.b3a0d"
@@ -3196,7 +2824,7 @@
             "38d25aa3.d6580e"
         ],
         "x": 1115,
-        "y": 600,
+        "y": 200,
         "wires": []
     },
     {
@@ -3219,7 +2847,7 @@
         "to": "",
         "reg": false,
         "x": 950,
-        "y": 600,
+        "y": 200,
         "wires": [
             [
                 "6314f116.228558"
@@ -3245,7 +2873,7 @@
         "payloadType": "bool",
         "topic": "",
         "x": 100,
-        "y": 480,
+        "y": 80,
         "wires": [
             [
                 "3a0715a6.cd3b7a"
@@ -3304,7 +2932,7 @@
         "to": "",
         "reg": false,
         "x": 540,
-        "y": 600,
+        "y": 200,
         "wires": [
             [
                 "6a5a4551.de6ba4"
@@ -3333,7 +2961,7 @@
         "payload": "Reset",
         "payloadType": "str",
         "x": 90,
-        "y": 560,
+        "y": 160,
         "wires": [
             [
                 "1ef07d45.b639d3"
@@ -3353,7 +2981,7 @@
         "format": "{{msg.payload.status}}",
         "layout": "row-spread",
         "x": 720,
-        "y": 780,
+        "y": 380,
         "wires": []
     },
     {
@@ -3369,7 +2997,7 @@
         "format": "{{msg.payload.WPos[0]}}",
         "layout": "row-spread",
         "x": 720,
-        "y": 820,
+        "y": 420,
         "wires": []
     },
     {
@@ -3385,7 +3013,7 @@
         "format": "{{msg.payload.WPos[1]}}",
         "layout": "row-spread",
         "x": 720,
-        "y": 860,
+        "y": 460,
         "wires": []
     },
     {
@@ -3401,7 +3029,7 @@
         "format": "{{msg.payload.WPos[2]}}",
         "layout": "row-spread",
         "x": 720,
-        "y": 900,
+        "y": 500,
         "wires": []
     },
     {
@@ -3423,7 +3051,7 @@
         "payloadType": "str",
         "topic": "",
         "x": 90,
-        "y": 600,
+        "y": 200,
         "wires": [
             [
                 "a2eeebbc.7e8e78",
@@ -3449,7 +3077,7 @@
         "repair": false,
         "outputs": 1,
         "x": 800,
-        "y": 740,
+        "y": 340,
         "wires": [
             [
                 "30dc015.38898fe"
@@ -3472,11 +3100,12 @@
         "randomUnits": "seconds",
         "drop": true,
         "x": 1030,
-        "y": 740,
+        "y": 340,
         "wires": [
             [
-                "b7c442b7.9c023",
-                "3c7b8f67.5d206"
+                "3c7b8f67.5d206",
+                "558e16e9.0c57e",
+                "feef996d.a69e18"
             ]
         ]
     },
@@ -3493,7 +3122,7 @@
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "x": 730,
-        "y": 940,
+        "y": 540,
         "wires": []
     },
     {
@@ -3509,7 +3138,7 @@
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "x": 710,
-        "y": 980,
+        "y": 580,
         "wires": []
     },
     {
@@ -3525,7 +3154,7 @@
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "x": 710,
-        "y": 1020,
+        "y": 620,
         "wires": []
     },
     {
@@ -3541,7 +3170,7 @@
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "x": 710,
-        "y": 1060,
+        "y": 660,
         "wires": []
     },
     {
@@ -3554,8 +3183,8 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 560,
-        "y": 960,
+        "x": 540,
+        "y": 560,
         "wires": [
             [
                 "8b3902a0.95ef38",
@@ -3583,7 +3212,7 @@
         "initialize": "",
         "finalize": "",
         "x": 290,
-        "y": 560,
+        "y": 160,
         "wires": [
             [
                 "c54aa4a0.d99ac"
@@ -3603,7 +3232,7 @@
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "x": 890,
-        "y": 940,
+        "y": 540,
         "wires": []
     },
     {
@@ -3619,7 +3248,7 @@
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "x": 890,
-        "y": 980,
+        "y": 580,
         "wires": []
     },
     {
@@ -3635,7 +3264,7 @@
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "x": 890,
-        "y": 1020,
+        "y": 620,
         "wires": []
     },
     {
@@ -3651,7 +3280,7 @@
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "x": 890,
-        "y": 1060,
+        "y": 660,
         "wires": []
     },
     {
@@ -3719,7 +3348,7 @@
             "4b17a591.a1ab24"
         ],
         "x": 595,
-        "y": 1060,
+        "y": 660,
         "wires": [
             [
                 "8b3902a0.95ef38",
@@ -3742,7 +3371,7 @@
             "49b17742.94cf1"
         ],
         "x": 455,
-        "y": 560,
+        "y": 160,
         "wires": []
     },
     {
@@ -3754,7 +3383,7 @@
             "49b17742.94cf1"
         ],
         "x": 535,
-        "y": 1060,
+        "y": 660,
         "wires": []
     },
     {
@@ -3779,7 +3408,7 @@
         "payload": "0",
         "payloadType": "num",
         "x": 450,
-        "y": 1060,
+        "y": 660,
         "wires": [
             [
                 "c1d4b009.644d3"
@@ -3877,7 +3506,7 @@
         "max": "3500",
         "step": "100",
         "x": 240,
-        "y": 320,
+        "y": 380,
         "wires": [
             [
                 "c6e2d41e.21233",
@@ -3898,7 +3527,7 @@
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "x": 410,
-        "y": 320,
+        "y": 380,
         "wires": []
     },
     {
@@ -3923,7 +3552,7 @@
         "payload": "3500",
         "payloadType": "num",
         "x": 90,
-        "y": 320,
+        "y": 380,
         "wires": [
             [
                 "194c48fe.71d01f"
@@ -3941,7 +3570,7 @@
         "initialize": "",
         "finalize": "",
         "x": 540,
-        "y": 320,
+        "y": 380,
         "wires": [
             []
         ]
@@ -3954,8 +3583,8 @@
         "links": [
             "1c6d6c73.be5c5c"
         ],
-        "x": 695,
-        "y": 300,
+        "x": 675,
+        "y": 360,
         "wires": [
             [
                 "46cfb820.6425a"
@@ -3971,7 +3600,7 @@
             "870d55c4.fbf018"
         ],
         "x": 595,
-        "y": 900,
+        "y": 500,
         "wires": []
     },
     {
@@ -4635,7 +4264,7 @@
         "payloadType": "str",
         "topic": "",
         "x": 70,
-        "y": 900,
+        "y": 500,
         "wires": [
             [
                 "3817afc6.347c78"
@@ -4651,7 +4280,7 @@
             "38d25aa3.d6580e"
         ],
         "x": 175,
-        "y": 900,
+        "y": 500,
         "wires": []
     },
     {
@@ -4899,6 +4528,723 @@
         "y": 440,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "9b8a9649.0473c",
+        "type": "inject",
+        "z": "3ac44c2f.c95524",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 90,
+        "y": 140,
+        "wires": [
+            [
+                "c9371ff0.78eeb8"
+            ]
+        ]
+    },
+    {
+        "id": "c9371ff0.78eeb8",
+        "type": "ui_dropdown",
+        "z": "3ac44c2f.c95524",
+        "name": "",
+        "label": "Spacing (cm)",
+        "tooltip": "",
+        "place": "Select option",
+        "group": "19dc6535.e7fc1b",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "multiple": false,
+        "options": [
+            {
+                "label": "0.5 cm",
+                "value": 0.5,
+                "type": "num"
+            },
+            {
+                "label": "1 cm",
+                "value": "1",
+                "type": "str"
+            },
+            {
+                "label": "2 cm",
+                "value": "2",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "",
+        "x": 250,
+        "y": 140,
+        "wires": [
+            [
+                "50bc5528.6ee664"
+            ]
+        ]
+    },
+    {
+        "id": "50bc5528.6ee664",
+        "type": "function",
+        "z": "3ac44c2f.c95524",
+        "name": "",
+        "func": "var value = msg.payload;\nglobal.set('spacing', value);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 540,
+        "y": 140,
+        "wires": [
+            [
+                "1e74c5b9.cf98a2"
+            ]
+        ]
+    },
+    {
+        "id": "b06a74ac.e54108",
+        "type": "ui_chart",
+        "z": "3f31bec0.a9e20a",
+        "name": "",
+        "group": "591df4c.3244c0c",
+        "order": 13,
+        "width": "6",
+        "height": "6",
+        "label": "chart",
+        "chartType": "radar",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "99",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 490,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8baa0f9a.cd627",
+        "type": "ui_valuetrail",
+        "z": "3f31bec0.a9e20a",
+        "group": "591df4c.3244c0c",
+        "order": 6,
+        "width": "9",
+        "height": "1",
+        "name": "Sensor A",
+        "label": "",
+        "unit": "",
+        "blur": false,
+        "minmax": false,
+        "showvalue": false,
+        "decimals": 0,
+        "colorLine": "#ff9900",
+        "colorFromTheme": false,
+        "stroke": 2,
+        "property": "payload",
+        "pointcount": 8,
+        "x": 640,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "575c12f9.7be82c",
+        "type": "ui_text",
+        "z": "3f31bec0.a9e20a",
+        "group": "591df4c.3244c0c",
+        "order": 5,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Sensor A",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "x": 500,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "c6ca5a4f.8d1928",
+        "type": "ui_text",
+        "z": "3f31bec0.a9e20a",
+        "group": "591df4c.3244c0c",
+        "order": 7,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Sensor B",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "x": 500,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "795c0e70.5545c",
+        "type": "ui_valuetrail",
+        "z": "3f31bec0.a9e20a",
+        "group": "591df4c.3244c0c",
+        "order": 8,
+        "width": "9",
+        "height": "1",
+        "name": "Sensor B",
+        "label": "",
+        "unit": "",
+        "blur": false,
+        "minmax": false,
+        "showvalue": false,
+        "decimals": 0,
+        "colorLine": "#00fa00",
+        "colorFromTheme": false,
+        "stroke": 2,
+        "property": "payload",
+        "pointcount": 8,
+        "x": 640,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "c19a15ab.b45a5",
+        "type": "ui_text",
+        "z": "3f31bec0.a9e20a",
+        "group": "591df4c.3244c0c",
+        "order": 9,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Sensor C",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "x": 500,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "6e29794a.25c97",
+        "type": "ui_valuetrail",
+        "z": "3f31bec0.a9e20a",
+        "group": "591df4c.3244c0c",
+        "order": 10,
+        "width": "9",
+        "height": "1",
+        "name": "Sensor C",
+        "label": "",
+        "unit": "",
+        "blur": false,
+        "minmax": false,
+        "showvalue": false,
+        "decimals": 0,
+        "colorLine": "#0432ff",
+        "colorFromTheme": false,
+        "stroke": 2,
+        "property": "payload",
+        "pointcount": 8,
+        "x": 640,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "b76fbb5a.787e2",
+        "type": "ui_text",
+        "z": "3f31bec0.a9e20a",
+        "group": "591df4c.3244c0c",
+        "order": 11,
+        "width": "3",
+        "height": "1",
+        "name": "",
+        "label": "Sensor Z",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "x": 500,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "f52db44a.fd1958",
+        "type": "ui_valuetrail",
+        "z": "3f31bec0.a9e20a",
+        "group": "591df4c.3244c0c",
+        "order": 12,
+        "width": "9",
+        "height": "1",
+        "name": "Sensor Z",
+        "label": "",
+        "unit": "",
+        "blur": false,
+        "minmax": false,
+        "showvalue": false,
+        "decimals": 0,
+        "colorLine": "#ff40ff",
+        "colorFromTheme": false,
+        "stroke": 2,
+        "property": "payload",
+        "pointcount": 8,
+        "x": 640,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "875fcfc4.58c928",
+        "type": "inject",
+        "z": "3f31bec0.a9e20a",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 100,
+        "y": 60,
+        "wires": [
+            [
+                "55256f98.385bf"
+            ]
+        ]
+    },
+    {
+        "id": "55256f98.385bf",
+        "type": "function",
+        "z": "3f31bec0.a9e20a",
+        "name": "Random sensor data",
+        "func": "var msg1 = {};\nvar msg2 = {};\nvar msg3 = {};\nvar msg4 = {};\n\nmsg1.payload = Math.round(Math.random()*25);\nmsg1.topic = \"Sensor A\";\n\nmsg2.payload = (Math.round(Math.random()*25)+25);\nmsg2.topic = \"Sensor B\";\n\nmsg3.payload = (Math.round(Math.random()*25)+50);\nmsg3.topic = \"Sensor C\";\n\nmsg4.payload = (Math.round(Math.random()*25)+75);\nmsg4.topic = \"Sensor Z\";\n\nreturn [msg1, msg2, msg3, msg4];",
+        "outputs": 4,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 300,
+        "y": 60,
+        "wires": [
+            [
+                "b06a74ac.e54108",
+                "c91614a6.60764",
+                "651258db.d89ab",
+                "575c12f9.7be82c",
+                "8baa0f9a.cd627"
+            ],
+            [
+                "b06a74ac.e54108",
+                "c91614a6.60764",
+                "651258db.d89ab",
+                "c6ca5a4f.8d1928",
+                "795c0e70.5545c"
+            ],
+            [
+                "b06a74ac.e54108",
+                "c91614a6.60764",
+                "651258db.d89ab",
+                "c19a15ab.b45a5",
+                "6e29794a.25c97"
+            ],
+            [
+                "b06a74ac.e54108",
+                "c91614a6.60764",
+                "651258db.d89ab",
+                "b76fbb5a.787e2",
+                "f52db44a.fd1958"
+            ]
+        ]
+    },
+    {
+        "id": "c91614a6.60764",
+        "type": "ui_chart",
+        "z": "3f31bec0.a9e20a",
+        "name": "",
+        "group": "591df4c.3244c0c",
+        "order": 14,
+        "width": "6",
+        "height": "6",
+        "label": "chart",
+        "chartType": "polar-area",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "99",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 490,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "651258db.d89ab",
+        "type": "ui_chart",
+        "z": "3f31bec0.a9e20a",
+        "name": "",
+        "group": "f9aacf92.64234",
+        "order": 10,
+        "width": "12",
+        "height": "6",
+        "label": "Sensor data",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "auto",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "99",
+        "removeOlder": 1,
+        "removeOlderPoints": "180",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "x": 510,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "558e16e9.0c57e",
+        "type": "change",
+        "z": "6108fa1d.d7726c",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "delay",
+                "pt": "msg",
+                "to": "sampleTime",
+                "tot": "global"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1200,
+        "y": 320,
+        "wires": [
+            [
+                "b7c442b7.9c023"
+            ]
+        ]
+    },
+    {
+        "id": "8d6db65e.66e4a8",
+        "type": "file",
+        "z": "6108fa1d.d7726c",
+        "name": "",
+        "filename": "mapping.csv",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 1230,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "feef996d.a69e18",
+        "type": "change",
+        "z": "6108fa1d.d7726c",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "timestamp",
+                "pt": "msg",
+                "to": "",
+                "tot": "date"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1210,
+        "y": 380,
+        "wires": [
+            [
+                "fc06f9bc.148f3"
+            ]
+        ]
+    },
+    {
+        "id": "fc06f9bc.148f3",
+        "type": "function",
+        "z": "6108fa1d.d7726c",
+        "name": "Position",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1180,
+        "y": 420,
+        "wires": [
+            [
+                "8d6db65e.66e4a8"
+            ]
+        ]
+    },
+    {
+        "id": "96732d.1019e4d",
+        "type": "debug",
+        "z": "6108fa1d.d7726c",
+        "name": "Join",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1290,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "edd5fa5c.08a2c",
+        "type": "inject",
+        "z": "6108fa1d.d7726c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "values",
+        "payload": "{\"values\":{\"a\":0,\"b\":0,\"c\":0,\"z\":0}}",
+        "payloadType": "str",
+        "x": 1070,
+        "y": 660,
+        "wires": [
+            [
+                "6b906498.dbca9c"
+            ]
+        ]
+    },
+    {
+        "id": "ff826aa2.a41148",
+        "type": "inject",
+        "z": "6108fa1d.d7726c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "position",
+        "payload": "{\"position\":{\"x\":0,\"y\":0,\"z\":0}}",
+        "payloadType": "str",
+        "x": 1070,
+        "y": 720,
+        "wires": [
+            [
+                "6b906498.dbca9c"
+            ]
+        ]
+    },
+    {
+        "id": "a340074a.a38938",
+        "type": "inject",
+        "z": "6108fa1d.d7726c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "timestamp",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1120,
+        "y": 600,
+        "wires": [
+            [
+                "6b906498.dbca9c"
+            ]
+        ]
+    },
+    {
+        "id": "8b0e19ce.660a9",
+        "type": "inject",
+        "z": "6108fa1d.d7726c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "position",
+        "payload": "{\"position\":{\"x\":1,\"y\":1,\"z\":1}}",
+        "payloadType": "str",
+        "x": 1230,
+        "y": 720,
+        "wires": [
+            [
+                "6b906498.dbca9c"
+            ]
+        ]
+    },
+    {
+        "id": "6b906498.dbca9c",
+        "type": "function",
+        "z": "6108fa1d.d7726c",
+        "name": "Combine",
+        "func": "if (msg.topic ==\"values\"){context.set(\"values\", msg.payload)}\nif (msg.topic ==\"timestamp\"){context.set(\"timestamp\", msg.payload)}\nif (msg.topic ==\"position\"){\nmsg.payload = context.get(\"values\");\nreturn msg;\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1160,
+        "y": 780,
+        "wires": [
+            [
+                "96732d.1019e4d"
+            ]
+        ]
+    },
+    {
+        "id": "726b4f27.8af0c",
+        "type": "inject",
+        "z": "6108fa1d.d7726c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "values",
+        "payload": "{\"values\":{\"a\":1,\"b\":1,\"c\":1,\"z\":1}}",
+        "payloadType": "str",
+        "x": 1230,
+        "y": 660,
+        "wires": [
+            [
+                "6b906498.dbca9c"
+            ]
         ]
     }
 ]
