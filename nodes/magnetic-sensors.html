@@ -1,0 +1,44 @@
+<script type="text/javascript">
+    RED.nodes.registerType('magnetic-sensors',{
+        category: 'magnetic-rig',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value:""}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() {
+            return this.name||"magnetic-sensors";
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="magnetic-sensors">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="magnetic-sensors">
+    <p>Allows for the control over magnetic sensor package.</p>
+    <p>
+        Input: Payload is a single number for how often you want to sample from 2-30 for a 200ms to 3 sec intervall
+        An input of 0 will turn of the homing function.
+    </p>
+
+    <p>
+        Output ha a payload with the following properties:
+        <ul>
+            <li>sensor: boolean. True if sensor is on</li>
+            <li>connected: boolean. It has a connection primary. A few cm left to go.</li>
+            <li>a: number. 0-40000 with a -1 if no data is available</li>
+            <li>b: number. 0-40000 with a -1 if no data is available</li>
+            <li>c: number. 0-40000 with a -1 if no data is available</li>
+            <li>z: number. 0-40000 with a -1 if no data is available</li>
+            <li>timestamp: number. When the message was processed. Same as Date.now()</li> 
+        </ul>
+        A, b and c is the ring with Z being the main power coil.
+    </p>
+</script>
