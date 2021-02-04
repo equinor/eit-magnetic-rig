@@ -22,22 +22,23 @@
 </script>
 
 <script type="text/html" data-help-name="magnetic-sensors">
-    <p>Allows for the controll over magnetic sensor package.</p>
+    <p>Allows for the control over magnetic sensor package.</p>
     <p>
         Input: Payload is a single number for how often you want to sample from 2-30 for a 200ms to 3 sec intervall
         An input of 0 will turn of the homing function.
     </p>
 
     <p>
-        Output ha a payload with the folowing properties:
+        Output ha a payload with the following properties:
         <ul>
             <li>sensor: boolean. True if sensor is on</li>
-            <li>connected: boolean. It has a conection primary. A few cm left to go. (in water)</li>
-            <li>a: number. 0-40000 with a -1 if no data is availabe</li>
-            <li>b: number. 0-40000 with a -1 if no data is availabe</li>
-            <li>c: number. 0-40000 with a -1 if no data is availabe</li>
-            <li>z: number. 0-40000 with a -1 if no data is availabe</li>
+            <li>connected: boolean. It has a connection primary. A few cm left to go.</li>
+            <li>a: number. 0-40000 with a -1 if no data is available</li>
+            <li>b: number. 0-40000 with a -1 if no data is available</li>
+            <li>c: number. 0-40000 with a -1 if no data is available</li>
+            <li>z: number. 0-40000 with a -1 if no data is available</li>
+            <li>timestamp: number. When the message was processed. Same as Date.now()</li> 
         </ul>
-        A, b and c is the ring with Z beeing the main power coil.
+        A, b and c is the ring with Z being the main power coil.
     </p>
 </script>

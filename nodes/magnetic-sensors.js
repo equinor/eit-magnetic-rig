@@ -1,11 +1,20 @@
 const net = require('net');
 const { send } = require('process');
 
+const homing = require('homing');
+
+const crc16 = homing.crc16;
+
 module.exports = function(RED) {
     function MagneticSensorsNode(config) {
         RED.nodes.createNode(this,config);
         var node = this;
-        let socket = net.createConnection(5000, "192.168.2.61")
+        let socket = new net.Socket();
+        try {
+            socket.connect(5000, "192.168.2.61");
+        } catch (error) {
+            node.error("Was not able to connect to sec side.",hasError);
+        }
         node.status({fill:"red",shape:"ring",text:"disconnected"});
 
         socket.on("close", (hasError) => {
@@ -16,10 +25,16 @@ module.exports = function(RED) {
         });
     
         socket.on("connect", () => {
-            self.status({fill:"green",shape:"dot",text:"connected"});
+            node.status({fill:"green",shape:"dot",text:"connected"});
+        });
+    
+        socket.on("error", error => {
+            node.status({fill:"red",shape:"ring",text:"disconnected"});
+            node.error(error);
         });
     
         socket.on("data", (data) => {
+            let time = Date.now();
             //data <Buffer 02 00 68 73 09 01 03 18 01 de 01 48 00 0d 5f 80 00>
             let view = new DataView(data.buffer);
             let status = view.getUint8(5);
@@ -37,13 +52,14 @@ module.exports = function(RED) {
             msg.payload.b = b == 0xFFFF ? -1 : b;
             msg.payload.c = c == 0xFFFF ? -1 : c;
             msg.payload.z = z == 0xFFFF ? -1 : z;
+            msg.payload.timestamp = time;
 
             node.send(msg);
         });
     
 
         node.on('input', function(msg, send, done) {
-            var message = new ArrayBuffer(9);
+            var buffer = new ArrayBuffer(9);
             let view = new DataView(buffer);
             view.setUint8(0, 0x02); // Start of message
             view.setUint8(1, 0x00); // Address
@@ -54,7 +70,7 @@ module.exports = function(RED) {
             view.setUint8(6, msg.payload);
             view.setUint16(7, crc16(new Uint8Array(buffer.slice(0,7))));
 
-            socket.write(new Uint8Array(message));
+            socket.write(new Uint8Array(buffer));
             done();
         });
     }
