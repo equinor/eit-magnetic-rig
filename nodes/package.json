@@ -11,7 +11,8 @@
   "node-red": {
     "nodes": {
       "lower-case": "lower-case.js",
-      "parse-status": "parse-status.js"
+      "parse-status": "parse-status.js",
+      "magnetic-sensors": "magnetic-sensors.js"
     }
   },
   "dependencies": {

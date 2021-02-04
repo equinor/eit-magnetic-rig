@@ -89,9 +89,6 @@ function secondaryTest() {
     view.setUint8(4, 0x02); // Data Length
     view.setUint8(5, 0x01);
     view.setUint8(6, 0x02);
-    console.log(buffer.slice(0,7));
-    console.log(crc16(new Uint8Array(buffer.slice(0,7))));
-
     view.setUint16(7, crc16(new Uint8Array(buffer.slice(0,7))));
 
     console.log(buffer);
