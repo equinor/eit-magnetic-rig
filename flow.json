@@ -439,7 +439,6 @@
             "3cfdba29.01e876",
             "d188d5e0.6dc478",
             "671d5129.c184e",
-            "9f6871ab.8440b8",
             "d852b2ea.2060f",
             "457efe09.79c0d8",
             "a5dd9dfa.937f08",
@@ -4845,7 +4844,7 @@
         "initialize": "",
         "finalize": "",
         "x": 360,
-        "y": 240,
+        "y": 200,
         "wires": [
             []
         ]
@@ -4899,13 +4898,13 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "10",
+        "payload": "5",
         "payloadType": "num",
-        "x": 90,
+        "x": 70,
         "y": 200,
         "wires": [
             [
-                "3a6b6df8.fba0ba"
+                "4c7719b7.1dad68"
             ]
         ]
     },
@@ -5117,20 +5116,20 @@
         "z": "8a5ecff9.35f98",
         "name": "",
         "group": "591df4c.3244c0c",
-        "order": 5,
+        "order": 3,
         "width": 2,
         "height": 1,
         "passthru": false,
-        "label": "100mm",
+        "label": "5mm",
         "tooltip": "",
         "color": "",
         "bgcolor": "",
         "icon": "",
-        "payload": "100",
+        "payload": "5",
         "payloadType": "num",
         "topic": "",
-        "x": 220,
-        "y": 240,
+        "x": 210,
+        "y": 200,
         "wires": [
             [
                 "741d0faf.3269b"
@@ -5304,7 +5303,7 @@
         "initialize": "",
         "finalize": "",
         "x": 360,
-        "y": 200,
+        "y": 240,
         "wires": [
             []
         ]
@@ -5315,20 +5314,20 @@
         "z": "8a5ecff9.35f98",
         "name": "",
         "group": "591df4c.3244c0c",
-        "order": 3,
+        "order": 5,
         "width": 2,
         "height": 1,
         "passthru": false,
-        "label": "10mm",
+        "label": "100mm",
         "tooltip": "",
         "color": "",
         "bgcolor": "",
         "icon": "",
-        "payload": "10",
+        "payload": "100",
         "payloadType": "num",
         "topic": "",
-        "x": 210,
-        "y": 200,
+        "x": 220,
+        "y": 240,
         "wires": [
             [
                 "4cf0bb32.222b74"
@@ -5434,16 +5433,16 @@
         "type": "function",
         "z": "8a5ecff9.35f98",
         "name": "Generate gcode",
-        "func": "var feed=global.get('feed') || 100;\nvar jogIncrement=global.get('jogIncrement') || 1;\nvar origoX=global.get('origoX') || 535;\nvar origoY=global.get('origoY') || 320;\nvar origoZ=global.get('origoZ') || 230;\nvar position = global.get(\"rig.position\") || null;\nvar values = global.get(\"sensors\") || null;\n\nvar aVal = values.a;\nvar bVal = values.b;\nvar cVal = values.c;\nvar zVal = values.z;\n\nvar abVal = (aVal+bVal)/2;\nvar acVal = (aVal+cVal)/2;\nvar bcVal = (bVal+cVal)/2;\n\nvar xPosChange = 0;\nvar yPosChange = 0;\nvar zPosChange = 0;\n\n\nif(aVal > bcVal+150){ //NW\n    xPosChange = jogIncrement;\n    yPosChange = jogIncrement;\n} \nelse if(bVal > acVal+130){ //NE\n    xPosChange = jogIncrement;\n    yPosChange = -jogIncrement;\n} \nelse if(cVal > abVal+130){ //S\n    xPosChange = -jogIncrement;\n} \nelse if(bcVal > aVal+130){ //SW\n    xPosChange = -jogIncrement;\n    yPosChange = -jogIncrement;\n} \nelse if(acVal > bVal+130){ //SE\n    xPosChange = -jogIncrement;\n    yPosChange = jogIncrement;\n} \nelse if(abVal > cVal+130){ //N\n    xPosChange = jogIncrement;\n} \nelse if(zVal < 35700){\n    zPosChange = -10;\n}\n\nvar gcode=\"$J=G91G21X\"+ xPosChange + \"Y\"+ yPosChange + \"Z\"+ zPosChange + \"F\"+feed;\n\nvar newPosition = {\n    \"x\": xPosChange,\n    \"y\": yPosChange,\n    \"z\": zPosChange\n}\n\nmsg = null;\nvar msg1 = {};\nvar msg2 = {};\n\nmsg1.payload = gcode;\nmsg2.payload = newPosition;\n\nreturn [msg1,msg2];",
+        "func": "var feed=global.get('feed') || 100;\nvar jogIncrement=global.get('jogIncrement') || 1;\nvar origoX=global.get('origoX') || 535;\nvar origoY=global.get('origoY') || 320;\nvar origoZ=global.get('origoZ') || 230;\nvar position = global.get(\"rig.position\") || null;\nvar values = global.get(\"sensors\") || null;\n\nvar aVal = values.a;\nvar bVal = values.b;\nvar cVal = values.c;\nvar zVal = values.z;\n\nvar abVal = (aVal+bVal)/2;\nvar acVal = (aVal+cVal)/2;\nvar bcVal = (bVal+cVal)/2;\nvar abcVal = (aVal+bVal+zVal)/3;\n\nvar xPosChange = 0;\nvar yPosChange = 0;\nvar zPosChange = 0;\n\n/*\n// The following code also needs to require a b and c to be of similar value\nif(abcVal > 2500){\n    jogIncrement = 1\n    if(zVal < 2000){\n        zPosChange = -5;\n    }\n}\nif(zVal > 15000){\n    jogIncrement = 0.1\n    if(zVal < 20000){\n        zPosChange = -2;\n    }\n}\n*/\n\nif(zVal < 7500 && (((aVal > 1500) && (bcVal > 1500)) || ((bVal > 1500) && (acVal > 1500)) || ((cVal > 1500) && (abVal > 1500)))){\n    jogIncrement = 2;\n}\nelse if(zVal < 7500 && (((aVal > 2500) && (bcVal > 2500)) || ((bVal > 2500) && (acVal > 2500)) || ((cVal > 2500) && (abVal > 2500)))){\n    jogIncrement = 1;\n}\n\nif(zVal > 7500){\n    jogIncrement = 0.5;\n} \nelse if(zVal > 20000){\n    jogIncrement = 0.3;\n}\nelse if(zVal > 30000){\n    jogIncrement = 0.1;\n}\n\nif(aVal > bcVal+150){ //NW\n    xPosChange = jogIncrement;\n    yPosChange = jogIncrement;\n} \nelse if(bVal > acVal+150){ //NE\n    xPosChange = jogIncrement;\n    yPosChange = -jogIncrement;\n} \nelse if(cVal > abVal+150){ //S\n    xPosChange = -jogIncrement;\n} \nelse if(bcVal > aVal+150){ //SW\n    xPosChange = -jogIncrement;\n    yPosChange = -jogIncrement;\n} \nelse if(acVal > bVal+150){ //SE\n    xPosChange = -jogIncrement;\n    yPosChange = jogIncrement;\n} \nelse if(abVal > cVal+150){ //N\n    xPosChange = jogIncrement;\n} \nelse if(zVal < 35700){\n    zPosChange = -10;\n}\n\nif(zVal > 35700){\n    xPosChange = 0;\n    yPosChange = 0;\n    zPosChange = 0;\n}\n\nvar gcode=\"$J=G91G21X\"+ xPosChange + \"Y\"+ yPosChange + \"Z\"+ zPosChange + \"F\"+feed;\n\nvar newPosition = {\n    \"x\": xPosChange,\n    \"y\": yPosChange,\n    \"z\": zPosChange\n}\n\nmsg = null;\nvar msg1 = {};\nvar msg2 = {};\n\nmsg1.payload = gcode;\nmsg2.payload = newPosition;\n\nreturn [msg1,msg2];",
         "outputs": 2,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 980,
+        "x": 1020,
         "y": 160,
         "wires": [
             [
-                "c5f873d2.ac10c"
+                "d188d5e0.6dc478"
             ],
             []
         ]
@@ -5482,7 +5481,7 @@
         "links": [
             "38d25aa3.d6580e"
         ],
-        "x": 1075,
+        "x": 1115,
         "y": 200,
         "wires": []
     },
@@ -5710,8 +5709,8 @@
         "color": "",
         "bgcolor": "red",
         "icon": "warning",
-        "payload": "\\x0085",
-        "payloadType": "str",
+        "payload": "[133]",
+        "payloadType": "bin",
         "topic": "",
         "x": 230,
         "y": 440,
@@ -5727,7 +5726,7 @@
         "z": "8a5ecff9.35f98",
         "name": "Serial_in",
         "links": [
-            "38d25aa3.d6580e"
+            "52d69fe7.a46dc"
         ],
         "x": 335,
         "y": 440,
@@ -6424,7 +6423,7 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "300",
+        "payload": "3500",
         "payloadType": "num",
         "x": 90,
         "y": 760,
@@ -6632,15 +6631,15 @@
         "op2": "0",
         "op1type": "bool",
         "op2type": "str",
-        "duration": "-1",
+        "duration": "-200",
         "extend": false,
         "overrideDelay": false,
-        "units": "s",
+        "units": "ms",
         "reset": "",
         "bytopic": "all",
         "topic": "topic",
         "outputs": 1,
-        "x": 800,
+        "x": 820,
         "y": 160,
         "wires": [
             [
@@ -6686,8 +6685,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 980,
-        "y": 240,
+        "x": 1000,
+        "y": 200,
         "wires": []
     },
     {
@@ -6705,11 +6704,10 @@
         "randomLast": "5",
         "randomUnits": "seconds",
         "drop": true,
-        "x": 970,
+        "x": 850,
         "y": 200,
         "wires": [
             [
-                "d188d5e0.6dc478",
                 "35c1b31a.db25a4"
             ]
         ]
@@ -6854,6 +6852,23 @@
         "wires": [
             [
                 "f9aafd7b.520f38"
+            ]
+        ]
+    },
+    {
+        "id": "52d69fe7.a46dc",
+        "type": "link in",
+        "z": "7f063300.e79e2c",
+        "name": "Direct_serial",
+        "links": [
+            "9f6871ab.8440b8"
+        ],
+        "x": 325,
+        "y": 100,
+        "wires": [
+            [
+                "29b54f72.c4d198",
+                "7f6a897f.8f8cd"
             ]
         ]
     }
