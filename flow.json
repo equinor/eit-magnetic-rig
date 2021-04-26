@@ -938,7 +938,7 @@
         "name": "Create mapping gcode",
         "info": "",
         "x": 120,
-        "y": 40,
+        "y": 20,
         "wires": []
     },
     {
@@ -1711,7 +1711,7 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "230",
+        "payload": "235",
         "payloadType": "num",
         "x": 90,
         "y": 200,
@@ -4661,7 +4661,7 @@
         "type": "function",
         "z": "8a5ecff9.35f98",
         "name": "",
-        "func": "var feed=global.get('feed') || 100;\nvar jogIncrement=global.get('jogIncrement') || 1;\nvar gcode=\"$J=G91G21X-\"+ jogIncrement + \"Y-\"+ jogIncrement + \"F\"+feed;\n\nmsg.payload = gcode;\nreturn msg;",
+        "func": "var feed=global.get('feed') || 100;\nvar jogIncrement=global.get('jogIncrement') || 1;\nvar gcode=\"$J=G91G21X\"+ jogIncrement + \"Y-\"+ jogIncrement + \"F\"+feed;\n\nmsg.payload = gcode;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -4750,7 +4750,7 @@
         "type": "function",
         "z": "8a5ecff9.35f98",
         "name": "",
-        "func": "var feed=global.get('feed') || 100;\nvar jogIncrement=global.get('jogIncrement') || 1;\nvar gcode=\"$J=G91G21X\"+ jogIncrement + \"Y\"+ jogIncrement + \"F\"+feed;\n\nmsg.payload = gcode;\nreturn msg;",
+        "func": "var feed=global.get('feed') || 100;\nvar jogIncrement=global.get('jogIncrement') || 1;\nvar gcode=\"$J=G91G21X-\"+ jogIncrement + \"Y\"+ jogIncrement + \"F\"+feed;\n\nmsg.payload = gcode;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -6991,6 +6991,35 @@
         "payloadType": "date",
         "x": 160,
         "y": 100,
+        "wires": [
+            [
+                "df2f75ec.007ec8"
+            ]
+        ]
+    },
+    {
+        "id": "dcb814ea.728828",
+        "type": "inject",
+        "z": "6108fa1d.d7726c",
+        "name": "New day means new name",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 00 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 60,
         "wires": [
             [
                 "df2f75ec.007ec8"
