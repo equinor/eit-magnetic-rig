@@ -1,9 +1,7 @@
-module.exports = function homing() {
-    let stream = requests()
+const net = require('net');
 
-    for (let i = 0; i < 10; i++) {
-        console.log(stream.next().value);
-    }
+module.exports = function homing(ip, port) {
+    messageStream(ip, port, () => {})
 }
 
 const ON = Buffer.from([0x01, 0x01, 0x02, 0x01, 0x05, 0x10, 0x03, 0x10, 0x01, 0x01, 0x0C, 0xBD ]);
@@ -22,3 +20,23 @@ function* requests() {
         yield Z;
     }
 }
+
+function messageStream(ip, port, callback) {
+    let messages = requests();
+    let socket = net.createConnection(port, ip)
+    socket.on("connect", () => {
+        let msg = messages.next().value;
+        socket.write(new Uint8Array(msg));
+        console.log("Out:", msg )
+    });
+
+    socket.on("data", (data) => {
+        callback(data);
+        console.log("In :", data )
+        setTimeout(() => {
+            let msg = messages.next().value;
+            socket.write(new Uint8Array(msg));
+            console.log("Out:", msg )
+        }, 10);
+    });
+} 
