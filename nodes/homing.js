@@ -1,9 +1,10 @@
 const net = require('net');
 
 module.exports = function homing(ip, port, callback) {
+    let collect = collector(callback);
     messageStream(ip, port, (data) => {
         let sensor = parseMessage(data);
-        callback(sensor)
+        collect(sensor)
     });
 }
 
@@ -45,10 +46,22 @@ function parseMessage(buffer) {
     let device = buffer.readUInt8(8);
     let value = buffer.readUInt16BE(9);
 
-    let sensor = "U";
-    if (device == 3) sensor = "A";
-    if (device == 4) sensor = "B";
-    if (device == 5) sensor = "C";
-    if (device == 6) sensor = "Z";
+    let sensor = "u";
+    if (device == 3) sensor = "a";
+    if (device == 4) sensor = "b";
+    if (device == 5) sensor = "c";
+    if (device == 6) sensor = "z";
     return [sensor,value];
+}
+
+function collector(callback) {
+    let packet = {}
+
+    return (sensor) => {
+        packet[sensor[0]] = sensor[1];
+        if (packet.a && packet.b && packet.c && packet.z) {
+            callback(packet);
+            packet = {}
+        }
+    }
 }
