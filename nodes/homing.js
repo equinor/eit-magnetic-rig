@@ -1,16 +1,9 @@
 module.exports = function homing() {
-    console.log("Turn on homing:01 01 02 01 05 10 03 10 01 01 0c bd");
-    console.log(ON);
-    console.log("Turn off homing:01 01 02 01 05 10 03 10 01 00 cc 7c");
-    console.log(OFF);
-    console.log("Sensor A: 01 01 01 01 04 10 03 10 03 7C 9F");
-    console.log(A);
-    console.log("Sensor B: 01 01 01 01 04 10 03 10 04 BE DE");
-    console.log(B);
-    console.log("Sensor C: 01 01 01 01 04 10 03 10 05 7E 1F");
-    console.log(C);
-    console.log("Sensor Z: 01 01 01 01 04 10 03 10 06 7F 5F");
-    console.log(Z);
+    let stream = requests()
+
+    for (let i = 0; i < 10; i++) {
+        console.log(stream.next().value);
+    }
 }
 
 const ON = Buffer.from([0x01, 0x01, 0x02, 0x01, 0x05, 0x10, 0x03, 0x10, 0x01, 0x01, 0x0C, 0xBD ]);
@@ -20,3 +13,12 @@ const B = Buffer.from([0x01, 0x01, 0x01, 0x01, 0x04, 0x10, 0x03, 0x10, 0x04, 0xB
 const C = Buffer.from([0x01, 0x01, 0x01, 0x01, 0x04, 0x10, 0x03, 0x10, 0x05, 0x7E, 0x1F ]);
 const Z = Buffer.from([0x01, 0x01, 0x01, 0x01, 0x04, 0x10, 0x03, 0x10, 0x06, 0x7F, 0x5F ]);
 
+function* requests() {
+    yield ON;
+    while (true) {
+        yield A;
+        yield B;
+        yield C;
+        yield Z;
+    }
+}
