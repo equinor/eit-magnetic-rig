@@ -4,7 +4,7 @@ const homing = require('homing');
 const crc16 = homing.crc16;
 
 function send(ip, message) {
-    let socket = net.createConnection(5000, ip)
+    let socket = net.createConnection(2468, ip)
     socket.on("close", (hasError) => {
         console.log("close hasError:", hasError);
     });
@@ -96,6 +96,70 @@ function secondaryTest() {
     send("192.168.2.61", buffer);
 }
 
+function firstTest() {
+    var buffer = new ArrayBuffer(12);
+    let view = new DataView(buffer);
+    view.setUint8(0, 0x01);
+    view.setUint8(1, 0x01);
+    view.setUint8(2, 0x02);
+    view.setUint8(3, 0x01);
+    view.setUint8(4, 0x05);
+    view.setUint8(5, 0x10);
+    view.setUint8(6, 0x03);
+    view.setUint8(7, 0x10);
+    view.setUint8(8, 0x01);
+    view.setUint8(9, 0x01);
+    view.setUint8(10, 0x0c);
+    view.setUint8(11, 0xbd);
+
+    //Turn on homing:01 01 02 01 05 10 03 10 01 01 0c bd 
+
+    send("192.168.1.254", buffer);
+}
+
+function homingOff() {
+    var buffer = new ArrayBuffer(12);
+    let view = new DataView(buffer);
+    view.setUint8(0, 0x01);
+    view.setUint8(1, 0x01);
+    view.setUint8(2, 0x02);
+    view.setUint8(3, 0x01);
+    view.setUint8(4, 0x05);
+    view.setUint8(5, 0x10);
+    view.setUint8(6, 0x03);
+    view.setUint8(7, 0x10);
+    view.setUint8(8, 0x01);
+    view.setUint8(9, 0x00);
+    view.setUint8(10, 0xcc);
+    view.setUint8(11, 0x7c);
+
+    //Turn off homing:01 01 02 01 05 10 03 10 01 00 cc 7c
+
+    send("192.168.1.254", buffer);
+}
+
+function SensorA() {
+    var buffer = new ArrayBuffer(11);
+    let view = new DataView(buffer);
+    view.setUint8(0, 0x01);
+    view.setUint8(1, 0x01);
+    view.setUint8(2, 0x01);
+    view.setUint8(3, 0x01);
+    view.setUint8(4, 0x04);
+    view.setUint8(5, 0x10);
+    view.setUint8(6, 0x03);
+    view.setUint8(7, 0x10);
+    view.setUint8(8, 0x06);
+    view.setUint8(9, 0x7f);
+    view.setUint8(10, 0x5f);
+
+    //Turn off homing:01 01 02 01 05 10 03 10 01 00 cc 7c
+
+    send("192.168.1.254", buffer);
+}
+
 //primaryTest2();
 //data <Buffer 02 00 68 73 09 01 03 18 01 de 01 48 00 0d 5f 80 00>
-secondaryTest();
+//primaryTest();
+SensorA();
+//homingOff();
