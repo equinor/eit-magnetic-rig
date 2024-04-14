@@ -1,10 +1,10 @@
 const net = require('net');
 
 module.exports = function homing(ip, port, callback) {
-    let collect = collector(callback);
+    //let collect = collector(callback);
     messageStream(ip, port, (data) => {
-        let sensor = parseMessage(data);
-        collect(sensor)
+        let sensor = parseAllMessage(data);
+        callback(sensor)
     });
 }
 
@@ -14,14 +14,12 @@ const A = Buffer.from([0x01, 0x01, 0x01, 0x01, 0x04, 0x10, 0x03, 0x10, 0x03, 0x7
 const B = Buffer.from([0x01, 0x01, 0x01, 0x01, 0x04, 0x10, 0x03, 0x10, 0x04, 0xBE, 0xDE ]);
 const C = Buffer.from([0x01, 0x01, 0x01, 0x01, 0x04, 0x10, 0x03, 0x10, 0x05, 0x7E, 0x1F ]);
 const Z = Buffer.from([0x01, 0x01, 0x01, 0x01, 0x04, 0x10, 0x03, 0x10, 0x06, 0x7F, 0x5F ]);
+const ALL = Buffer.from([0x01, 0x01, 0x01, 0x01, 0x10, 0x10, 0x03, 0x10, 0x03, 0x10, 0x03, 0x10, 0x04, 0x10, 0x03, 0x10, 0x05, 0x10, 0x03, 0x10, 0x06, 0x70, 0x75]);
 
 function* requests() {
     yield ON;
     while (true) {
-        yield A;
-        yield B;
-        yield C;
-        yield Z;
+        yield ALL;
     }
 }
 
@@ -40,7 +38,27 @@ function messageStream(ip, port, callback) {
             socket.write(new Uint8Array(msg));
         }, 10);
     });
-} 
+}
+function parseAllMessage(buffer) {
+    // 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 28 30
+    // 01 02 01 01 18 10 03 10 03 A1 A2 10 03 10 04 B1 B2 10 03 10 05 C1 C2 10 03 10 06 Z1 Z2 CS CS
+
+    if (buffer.length != 31) {
+        return {}
+    }
+
+    let a = buffer.readUInt16BE(9);
+    let b = buffer.readUInt16BE(15);
+    let c = buffer.readUInt16BE(21);
+    let z = buffer.readUInt16BE(27);
+
+    return {
+        "a": a,
+        "b": b,
+        "c": c,
+        "z": z,
+    }
+}
 
 function parseMessage(buffer) {
     let device = buffer.readUInt8(8);
