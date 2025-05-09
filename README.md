@@ -1,6 +1,17 @@
 # Magnetic Homing ROS2 Package
 
+A _proof of concept_ for how one can simulate a subsea drone that home in on the magnetic field from a subsea docking station charge port.  
+The main components are:
+- CNC rig - Repurposed to be the simulator where the toolhead is the drone (holds the charge connector) and the plate is the docking station with a charging port
+- Subsea charge connector (what the drone carry)
+- Subsea charge port (what the docking station provide)
+
+**ARCHIVED**: This repo is intended as a _proof of concept_ for drone vendors and other third parties to be inspired by and/or make it their own for their specific use case.  
+It is _not_ in any way, shape or form production ready code, and will not be maintained.
+
+
 ## Overview
+
 This project is a ROS2 package containing two nodes:
 1. **Magnetic Sensor Node**: Interacts with magnetic homing sensors to read magnetic strength values dynamically.
 2. **CNC Controller Node**: Communicates with a GRBL-based CNC controller (OpenBuilds Blackbox) to control a CNC rig.
