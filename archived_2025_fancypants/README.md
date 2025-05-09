@@ -114,8 +114,12 @@ For more detailed information about the physical setup and sensor arrangement, s
 ## Usage
 
 ### Prerequisites
-- A complete ROS2 development environment (we used Jazzy)
-- Python 3.8 or higher
+- A complete ROS2 development environment (Humble or Foxy recommended)
+- ROS2 build tools for compiling custom messages (`colcon`, `ament_cmake`)
+- Python 3.8 or higher with dependencies:
+  ```bash
+  pip install rclpy pyserial
+  ```
 - Hardware requirements:
   - Magnetic sensors accessible via Ethernet connection
   - CNC rig with GRBL controller accessible via USB-to-Serial connection
@@ -124,14 +128,14 @@ For more detailed information about the physical setup and sensor arrangement, s
 1. **Clone the repository** into your ROS2 workspace:
    ```bash
    cd ~/ros2_ws/src
-   git clone <repository-url>
+   git clone <repository-url> magnetic_homing
    ```
 
 2. **Build the package**:
    ```bash
    cd ~/ros2_ws
-   colcon build 
-   source install/setup.bash
+   colcon build --packages-select magnetic_homing
+   source install/setup.zsh
    ```
 
 ### Running the Modules

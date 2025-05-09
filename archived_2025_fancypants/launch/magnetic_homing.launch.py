@@ -26,10 +26,9 @@ def generate_launch_description():
     )
     
     # Create sensor node
-    # We cannot call a python script directly, so we call the executable declared in entry_points/console_scripts in setup.py
     sensor_node = Node(
         package='magnetic_homing',
-        executable='magnetic_sensor_node',
+        executable='magnetic_sensor_node.py',
         name='magnetic_sensor_node',
         parameters=[{
             'sensor_ip': LaunchConfiguration('sensor_ip'),
@@ -39,10 +38,9 @@ def generate_launch_description():
     )
     
     # Create CNC controller node
-    # We cannot call a python script directly, so we call the executable declared in entry_points/console_scripts in setup.py
     cnc_node = Node(
         package='magnetic_homing',
-        executable='cnc_node',
+        executable='cnc_controller_node.py',
         name='cnc_controller_node',
         parameters=[{
             'serial_port': LaunchConfiguration('serial_port'),
