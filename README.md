@@ -1,16 +1,18 @@
 # Magnetic Homing ROS2 Package
 
+
+**ARCHIVED**  
+This repo is intended as a _proof of concept_ for drone vendors and other third parties to be inspired by and/or make it their own for their specific use case.  
+It is _not_ in any way, shape or form production ready code, and will not be maintained.
+
+
+## Overview
+
 A _proof of concept_ for how one can simulate a subsea drone that home in on the magnetic field from a subsea docking station charge port.  
 The main components are:
 - CNC rig - Repurposed to be the simulator where the toolhead is the drone (holds the charge connector) and the plate is the docking station with a charging port
 - Subsea charge connector (what the drone carry)
 - Subsea charge port (what the docking station provide)
-
-**ARCHIVED**: This repo is intended as a _proof of concept_ for drone vendors and other third parties to be inspired by and/or make it their own for their specific use case.  
-It is _not_ in any way, shape or form production ready code, and will not be maintained.
-
-
-## Overview
 
 This project is a ROS2 package containing two nodes:
 1. **Magnetic Sensor Node**: Interacts with magnetic homing sensors to read magnetic strength values dynamically.
@@ -18,7 +20,8 @@ This project is a ROS2 package containing two nodes:
 
 Both nodes are implemented in Python for ease of use and compatibility with the end user's experience.
 
-This work builds upon the previous Node.js/Node-RED implementation available at: [https://github.com/equinor/eit-magnetic-rig](https://github.com/equinor/eit-magnetic-rig). The current ROS2 implementation adapts the core concepts and protocols from the original project while providing a more modular and robotics-focused framework using ROS2.
+This work builds upon the previous Node.js/Node-RED implementation available in directory [./archived_pre2025_code](./archived_pre2025_code/).  
+The current ROS2 implementation adapts the core concepts and protocols from the original project while providing a more modular and robotics-focused framework using ROS2.
 
 ## Disclaimer
 
@@ -37,7 +40,7 @@ This work builds upon the previous Node.js/Node-RED implementation available at:
 - Verifying operation
 - Basic movement and control commands
 
-For more detailed information about the physical setup and sensor arrangement, see the [Physical Setup](docs/physical_setup.md) documentation.
+For more detailed information about the physical setup and sensor arrangement, see the [Physical Setup](./docs/references/physical_setup.md) documentation.
 
 ---
 
