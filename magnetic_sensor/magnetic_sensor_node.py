@@ -11,7 +11,7 @@ from enum import Enum, auto
 
 # Import the custom message type if available
 try:
-    from magnetic_homing.msg import MagneticSensorData
+    from magnetic_sensor_data.msg import MagneticSensorData
     USE_CUSTOM_MSG = True
 except ImportError:
     USE_CUSTOM_MSG = False

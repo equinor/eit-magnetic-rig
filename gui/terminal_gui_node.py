@@ -9,7 +9,7 @@ try:
     import rclpy
     from rclpy.node import Node
     from std_msgs.msg import String, Float32MultiArray
-    from std_srvs.srv import Trigger, SetString
+    from std_srvs.srv import Trigger, SetBool
     HAS_ROS2 = True
 except ImportError:
     HAS_ROS2 = False
@@ -29,7 +29,7 @@ https://docs.ros.org/en/jazzy/Installation.html
 
 class CNCTuiNode(Node):
     def __init__(self, screen):
-        super().__init__('cnc_tui_node')
+        super().__init__('terminal_gui_node')
         self.screen = screen
         self.setup_curses()
         self.setup_ros()
@@ -85,9 +85,9 @@ class CNCTuiNode(Node):
             'random_move': self.create_client(Trigger, '/cnc/move_to_random_safe_position'),
             'emergency_stop': self.create_client(Trigger, '/cnc/emergency_stop'),
             'unlock_alarm': self.create_client(Trigger, '/cnc/unlock_alarm'),
-            'send_gcode': self.create_client(SetString, '/cnc/send_gcode'),
-            'set_feed': self.create_client(SetString, '/cnc/set_feed_rate'),
-            'jog': self.create_client(SetString, '/cnc/jog_increment'),
+            'send_gcode': self.create_client(SetBool, '/cnc/send_gcode'),
+            'set_feed': self.create_client(SetBool, '/cnc/set_feed_rate'),
+            'jog': self.create_client(SetBool, '/cnc/jog_increment'),
         }
 
     def update_display(self):
@@ -261,7 +261,7 @@ class CNCTuiNode(Node):
 
         try:
             if data is not None:
-                request = SetString.Request()
+                request = SetBool.Request()
                 request.data = data
             else:
                 request = Trigger.Request()

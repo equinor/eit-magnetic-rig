@@ -175,7 +175,7 @@ ros2 launch magnetic_homing magnetic_homing.launch.py sensor_ip:=192.168.1.254 s
 
 Start the TUI node to control the system through a terminal-based interface:
 ```bash
-ros2 run magnetic_homing cnc_tui_node.py
+ros2 run magnetic_homing terminal_gui_node
 ```
 
 The TUI provides:
