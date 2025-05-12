@@ -127,7 +127,7 @@ Moves to position above target origo at safe Z height.
 #### `/cnc/dock_at_target_origo` (std_srvs/Trigger)  
 Docks at target origo if already within XY tolerance.
 
-#### `/cnc/jog_increment` (std_srvs/SetString)
+#### `/cnc/jog_increment` (std_srvs/setBool)
 Executes a jog movement. Expects JSON-formatted string:
 ```json
 {
@@ -141,7 +141,7 @@ Executes a jog movement. Expects JSON-formatted string:
 
 ### `/cnc/send_gcode`
 
-**Service Type:** `std_srvs/SetString`
+**Service Type:** `std_srvs/setBool`
 
 **Request:**
 - `string data` - Contains the G-code command
@@ -204,7 +204,7 @@ Sets the CNC controller to relative positioning mode (G91).
 
 ### `/cnc/set_feed_rate`
 
-**Service Type:** `std_srvs/SetString`
+**Service Type:** `std_srvs/setBool`
 
 **Request:**
 - `string data` - Contains the feed rate value

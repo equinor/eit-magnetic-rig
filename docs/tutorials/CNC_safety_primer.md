@@ -121,7 +121,7 @@ When using the ROS2 interface for controlling the CNC machine:
 
 3. **Set a Safe Feed Rate**
    ```bash
-   ros2 service call /cnc/set_feed_rate std_srvs/srv/SetString "{data: '100'}"
+   ros2 service call /cnc/set_feed_rate std_srvs/srv/setBool "{data: '100'}"
    ```
 
 4. **Be Explicit About Movement Mode**
@@ -137,7 +137,7 @@ When using the ROS2 interface for controlling the CNC machine:
    - Increase distance or complexity only after confirming proper operation
    - Example movement command:
    ```bash
-   ros2 service call /cnc/send_gcode std_srvs/srv/SetString "{data: 'G0 X10 Y10'}"
+   ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: 'G0 X10 Y10'}"
    ```
 
 ## Final Safety Reminders

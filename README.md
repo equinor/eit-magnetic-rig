@@ -57,7 +57,7 @@ For more detailed information about the physical setup and sensor arrangement, s
   - **Message Type**: `MagneticSensorData.msg`
   - **Fields**: `float32 sensor_a`, `float32 sensor_b`, `float32 sensor_c`, `float32 sensor_z`
 - **Service**: `/set_sensor_ip`
-  - **Service Type**: `std_srvs/SetString`
+  - **Service Type**: `std_srvs/setBool`
   - **Request**: `string data` (containing the IP address)
   - **Response**: `bool success, string message`
 
@@ -87,7 +87,7 @@ For more detailed information about the physical setup and sensor arrangement, s
 > **IMPORTANT**: Please refer to the [CNC Safety Primer](docs/tutorials/CNC_safety_primer.md) document before operating the CNC controller. It contains critical safety information, including the risk of mechanical collisions at extreme positions.
 - **Services**:
   - `/cnc/send_gcode` - Send G-code commands to the CNC controller
-    - **Service Type**: `std_srvs/SetString`
+    - **Service Type**: `std_srvs/setBool`
     - **Request**: `string data` (containing the G-code command)
     - **Response**: `bool success, string message`
   - `/cnc/home` - Execute the homing procedure
@@ -107,7 +107,7 @@ For more detailed information about the physical setup and sensor arrangement, s
     - **Request**: (empty)
     - **Response**: `bool success, string message`
   - `/cnc/set_feed_rate` - Set the feed rate for movements
-    - **Service Type**: `std_srvs/SetString`
+    - **Service Type**: `std_srvs/setBool`
     - **Request**: `string data` (containing the feed rate)
     - **Response**: `bool success, string message`
 
@@ -151,7 +151,7 @@ ros2 launch magnetic_homing magnetic_homing.launch.py sensor_ip:=192.168.1.254 s
    ```
    - Use the `/set_sensor_ip` service to reconfigure the sensor's IP address:
      ```bash
-     ros2 service call /set_sensor_ip std_srvs/srv/SetString "{data: '192.168.1.254'}"
+     ros2 service call /set_sensor_ip std_srvs/srv/setBool "{data: '192.168.1.254'}"
      ```
 
 2. **Start the CNC Controller Node**:
@@ -160,7 +160,7 @@ ros2 launch magnetic_homing magnetic_homing.launch.py sensor_ip:=192.168.1.254 s
    ```
    - Use the `/cnc/send_gcode` service to send custom G-code commands:
      ```bash
-     ros2 service call /cnc/send_gcode std_srvs/srv/SetString "{data: 'G0 X10 Y10'}"
+     ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: 'G0 X10 Y10'}"
      ```
    - Use the `/cnc/home` service to home the machine:
      ```bash
@@ -242,11 +242,11 @@ The GUI requires a desktop environment and Python's tkinter library. For headles
   ```
 - Set feed rate to 500 mm/min:
   ```bash
-  ros2 service call /cnc/set_feed_rate std_srvs/srv/SetString "{data: '500'}"
+  ros2 service call /cnc/set_feed_rate std_srvs/srv/setBool "{data: '500'}"
   ```
 - Send G-code commands to move the CNC rig to a specific position (in absolute mode):
   ```bash
-  ros2 service call /cnc/send_gcode std_srvs/srv/SetString "{data: 'G0 X10 Y10'}"
+  ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: 'G0 X10 Y10'}"
   ```
 - Switch to relative positioning mode:
   ```bash
@@ -254,7 +254,7 @@ The GUI requires a desktop environment and Python's tkinter library. For headles
   ```
 - Send G-code commands to move the CNC rig relative to current position:
   ```bash
-  ros2 service call /cnc/send_gcode std_srvs/srv/SetString "{data: 'G0 X5 Y-3'}"
+  ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: 'G0 X5 Y-3'}"
   ```
 
 ---
