@@ -42,24 +42,31 @@ The feed rate determines the speed at which the CNC machine moves:
 To set the feed rate (in mm/min):
 
 ```bash
-ros2 service call /cnc/set_feed_rate std_srvs/srv/SetBool "{data: '500'}"
+ros2 service call /cnc/set_feed_rate std_srvs/srv/setBool "{data: '500'}"
 ```
 
 ## Basic Movement Commands
 
-### Linear Movement (G0/G1)
+### Linear Movement ($J=)
 
-- **G0**: Rapid movement (at maximum speed)
-- **G1**: Controlled movement (at specified feed rate)
+All movement commands use the `$J=` format with G90/G91 and G21 (metric) modifiers:
+
+```bash
+# Absolute move with feed rate
+ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: '$J=G90G21X100Y50F300'}"
+
+# Relative move with feed rate
+ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: '$J=G91G21X10Y5F300'}"
+```
 
 Examples:
 
 ```bash
 # Rapid move (G0)
-ros2 service call /cnc/send_gcode std_srvs/srv/SetBool "{data: 'G0 X100 Y50'}"
+ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: '$J=G90G21X100Y50'}"
 
 # Controlled move with feed rate (G1)
-ros2 service call /cnc/send_gcode std_srvs/srv/SetBool "{data: 'G1 X100 Y50 F300'}"
+ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: '$J=G91G21X10Y5F300'}"
 ```
 
 ### Single-Axis Movement
@@ -68,10 +75,10 @@ To move along only one axis:
 
 ```bash
 # Move only in X direction
-ros2 service call /cnc/send_gcode std_srvs/srv/SetBool "{data: 'G0 X100'}"
+ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: '$J=G90G21X100'}"
 
 # Move only in Y direction
-ros2 service call /cnc/send_gcode std_srvs/srv/SetBool "{data: 'G0 Y50'}"
+ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: '$J=G90G21Y50'}"
 ```
 
 ### Incremental Movements
@@ -83,10 +90,10 @@ Using relative mode for incremental movements:
 ros2 service call /cnc/set_relative_mode std_srvs/srv/Trigger "{}"
 
 # Move 10mm in X direction
-ros2 service call /cnc/send_gcode std_srvs/srv/SetBool "{data: 'G0 X10'}"
+ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: '$J=G91G21X10'}"
 
 # Move another 5mm in Y direction
-ros2 service call /cnc/send_gcode std_srvs/srv/SetBool "{data: 'G0 Y5'}"
+ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: '$J=G91G21Y5'}"
 ```
 
 ## Movement Patterns
@@ -100,17 +107,17 @@ This example creates a 3x3 grid pattern with 10mm spacing:
 ros2 service call /cnc/set_absolute_mode std_srvs/srv/Trigger "{}"
 
 # Set feed rate
-ros2 service call /cnc/set_feed_rate std_srvs/srv/SetBool "{data: '500'}"
+ros2 service call /cnc/set_feed_rate std_srvs/srv/setBool "{data: '500'}"
 
 # Go to starting position
-ros2 service call /cnc/send_gcode std_srvs/srv/SetBool "{data: 'G0 X0 Y0'}"
+ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: '$J=G90G21X0Y0'}"
 
 # Create grid pattern
 for row in 0 1 2; do
   for col in 0 1 2; do
     x=$((col * 10))
     y=$((row * 10))
-    ros2 service call /cnc/send_gcode std_srvs/srv/SetBool "{data: 'G0 X$x Y$y'}"
+    ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: '$J=G90G21X$xY$y'}"
     # Wait briefly at each point
     sleep 0.5
   done
@@ -126,7 +133,7 @@ This example moves in a circular pattern (approximate):
 ros2 service call /cnc/set_absolute_mode std_srvs/srv/Trigger "{}"
 
 # Go to center position
-ros2 service call /cnc/send_gcode std_srvs/srv/SetBool "{data: 'G0 X50 Y50'}"
+ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: '$J=G90G21X50Y50'}"
 
 # Create circular pattern
 for angle in $(seq 0 30 360); do
@@ -139,8 +146,38 @@ for angle in $(seq 0 30 360); do
   y=$(printf "%.2f" $y)
   
   # Move to position
-  ros2 service call /cnc/send_gcode std_srvs/srv/SetBool "{data: 'G0 X$x Y$y'}"
+  ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: '$J=G90G21X$xY$y'}"
 done
+```
+
+## Target Origo Movement
+
+The CNC controller provides services for target origo operations:
+
+```bash
+# Move to position above target origo (at safe Z height)
+ros2 service call /cnc/move_over_target_origo std_srvs/srv/Trigger "{}"
+
+# Dock at target origo (if within XY tolerance)
+ros2 service call /cnc/dock_at_target_origo std_srvs/srv/Trigger "{}"
+
+# Move directly to target origo (with safety checks)
+ros2 service call /cnc/move_to_target_origo std_srvs/srv/Trigger "{}"
+```
+
+## Jog Control
+
+For incremental movements, use the jog service with JSON-formatted parameters:
+
+```bash
+# Jog 10mm in X direction
+ros2 service call /cnc/jog_increment std_srvs/srv/setBool "{data: '{\"x\": 10.0, \"feed\": 500, \"relative\": true}'}"
+
+# Jog -5mm in Z direction
+ros2 service call /cnc/jog_increment std_srvs/srv/setBool "{data: '{\"z\": -5.0, \"feed\": 200, \"relative\": true}'}"
+
+# Move to absolute position using jog
+ros2 service call /cnc/jog_increment std_srvs/srv/setBool "{data: '{\"x\": 100.0, \"y\": 50.0, \"feed\": 500, \"relative\": false}'}"
 ```
 
 ## Monitoring Movement
@@ -220,7 +257,7 @@ If an error occurs:
 
 2. Unlock if necessary:
    ```bash
-   ros2 service call /cnc/send_gcode std_srvs/srv/SetBool "{data: '$X'}"
+   ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: '$X'}"
    ```
 
 3. Re-home if position is uncertain:
@@ -235,7 +272,7 @@ If an error occurs:
 Move multiple axes simultaneously for smooth paths:
 
 ```bash
-ros2 service call /cnc/send_gcode std_srvs/srv/SetBool "{data: 'G1 X100 Y50 Z25 F400'}"
+ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: '$J=G1X100Y50Z25F400'}"
 ```
 
 ### Sequential Movements
@@ -245,16 +282,16 @@ Execute a sequence of movements:
 ```bash
 # Create a function to send G-code and wait for completion
 send_gcode_and_wait() {
-  ros2 service call /cnc/send_gcode std_srvs/srv/SetBool "{data: '$1'}"
+  ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: '$1'}"
   sleep 1  # Adjust based on movement time
 }
 
 # Execute sequence
-send_gcode_and_wait "G0 X0 Y0"
-send_gcode_and_wait "G0 X100 Y0"
-send_gcode_and_wait "G0 X100 Y100"
-send_gcode_and_wait "G0 X0 Y100"
-send_gcode_and_wait "G0 X0 Y0"
+send_gcode_and_wait "$J=G90G21X0Y0"
+send_gcode_and_wait "$J=G90G21X100Y0"
+send_gcode_and_wait "$J=G90G21X100Y100"
+send_gcode_and_wait "$J=G90G21X0Y100"
+send_gcode_and_wait "$J=G90G21X0Y0"
 ```
 
 ### Creating a Movement Script
@@ -268,11 +305,11 @@ For complex movement patterns, create a separate script:
 ros2 service call /cnc/set_absolute_mode std_srvs/srv/Trigger "{}"
 
 # Set feed rate
-ros2 service call /cnc/set_feed_rate std_srvs/srv/SetBool "{data: '500'}"
+ros2 service call /cnc/set_feed_rate std_srvs/srv/setBool "{data: '500'}"
 
 # Define movement function
 function move_to {
-  ros2 service call /cnc/send_gcode std_srvs/srv/SetBool "{data: 'G0 X$1 Y$2'}"
+  ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: '$J=G90G21X$1Y$2'}"
   sleep $3
 }
 

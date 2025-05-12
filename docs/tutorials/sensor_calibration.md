@@ -61,7 +61,7 @@ sensor_node = Node(
     executable='magnetic_sensor_node.py',
     name='magnetic_sensor_node',
     parameters=[{
-        'sensor_ip': '192.168.1.100',
+        'sensor_ip': '192.168.1.254',
         'calibration_factor': 1.25,
         'calibration_offset': -0.5
     }],

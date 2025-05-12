@@ -7,6 +7,7 @@ import time
 import threading
 import re
 import json
+import random
 
 class CNCControllerNode(Node):
     """
@@ -36,6 +37,19 @@ class CNCControllerNode(Node):
         self.declare_parameter('baud_rate', 115200)
         self.declare_parameter('status_interval', 0.2)  # Status poll interval in seconds
         
+        # Add target and safety parameters
+        self.declare_parameter('target_origo_x', 524.0)
+        self.declare_parameter('target_origo_y', 318.0)
+        self.declare_parameter('target_origo_z', -235.0)
+        self.declare_parameter('safe_z_for_xy_traverse', -185.0)
+        self.declare_parameter('docking_xy_tolerance', 1.0)
+        self.declare_parameter('random_safe_min_x', 0.0)
+        self.declare_parameter('random_safe_max_x', 1000.0)
+        self.declare_parameter('random_safe_min_y', 0.0)
+        self.declare_parameter('random_safe_max_y', 600.0)
+        self.declare_parameter('random_safe_min_z', -185.0)
+        self.declare_parameter('random_safe_max_z', -50.0)
+
         # Get parameter values
         self.serial_port = self.get_parameter('serial_port').get_parameter_value().string_value
         self.baud_rate = self.get_parameter('baud_rate').get_parameter_value().integer_value
@@ -98,6 +112,29 @@ class CNCControllerNode(Node):
         )
         self.set_feed_rate_service = self.create_service(
             SetBool, 'cnc/set_feed_rate', self.set_feed_rate_callback
+        )
+        
+        # Add new movement services
+        self.move_to_target_service = self.create_service(
+            Trigger, 'cnc/move_to_target_origo', self.move_to_target_origo_callback
+        )
+        self.move_over_target_service = self.create_service(
+            Trigger, 'cnc/move_over_target_origo', self.move_over_target_origo_callback
+        )
+        self.dock_target_service = self.create_service(
+            Trigger, 'cnc/dock_at_target_origo', self.dock_at_target_origo_callback
+        )
+        self.random_move_service = self.create_service(
+            Trigger, 'cnc/move_to_random_safe_position', self.move_to_random_safe_callback
+        )
+        self.jog_service = self.create_service(
+            SetBool, 'cnc/jog_increment', self.jog_increment_callback
+        )
+        self.estop_service = self.create_service(
+            Trigger, 'cnc/emergency_stop', self.emergency_stop_callback
+        )
+        self.unlock_service = self.create_service(
+            Trigger, 'cnc/unlock_alarm', self.unlock_alarm_callback
         )
         
         # Serial reading and status polling threads
@@ -195,26 +232,39 @@ class CNCControllerNode(Node):
                 self.get_logger().error(f"Error resetting GRBL: {e}")
         return False
     
-    def parse_status(self, status_string):
-        """Parse GRBL status response."""
+    def send_jog_command(self, x=None, y=None, z=None, feed_rate=None, relative=False):
+        """Send a jog command matching the Node-RED implementation format"""
         try:
-            # Parse state
-            state_match = re.search(r'<([^,|>]+)', status_string)
+            cmd = "$J="
+            cmd += "G91" if relative else "G90"
+            cmd += "G21"  # Metric mode (always used in Node.js code)
+            
+            if x is not None:
+                cmd += f"X{x}"
+            if y is not None:
+                cmd += f"Y{y}"
+            if z is not None:
+                cmd += f"Z{z}"
+            if feed_rate is not None:
+                cmd += f"F{feed_rate}"
+            else:
+                cmd += f"F{self.feed_rate}"
+                
+            return self.send_command(cmd)
+            
+        except Exception as e:
+            self.get_logger().error(f"Error sending jog command: {e}")
+            return False, str(e)
+
+    def parse_status(self, status_string):
+        """Parse GRBL status response based on Node-RED implementation format."""
+        try:
+            # Node-RED format: <Idle|WPos:100.000,0.000,0.000|FS:0,0>
+            state_match = re.search(r'<([^|>]+)', status_string)
             if state_match:
                 self.machine_state = state_match.group(1)
             
-            # Parse machine position
-            mpos_match = re.search(r'MPos:([^|>]+)', status_string)
-            if mpos_match:
-                pos = mpos_match.group(1).split(',')
-                if len(pos) >= 3:
-                    self.machine_position = {
-                        'x': float(pos[0]),
-                        'y': float(pos[1]),
-                        'z': float(pos[2])
-                    }
-            
-            # Parse work position
+            # Parse work position (WPos) as used in Node-RED
             wpos_match = re.search(r'WPos:([^|>]+)', status_string)
             if wpos_match:
                 pos = wpos_match.group(1).split(',')
@@ -224,6 +274,8 @@ class CNCControllerNode(Node):
                         'y': float(pos[1]),
                         'z': float(pos[2])
                     }
+                    # Node-RED mainly used work position, so sync machine position
+                    self.machine_position = self.work_position.copy()
             
             # Publish the current position
             pos_msg = Float32MultiArray()
@@ -294,11 +346,6 @@ class CNCControllerNode(Node):
     
     def send_gcode_callback(self, request, response):
         """ROS2 service callback for sending G-code commands."""
-        if not self.serial_connected:
-            response.success = False
-            response.message = "Not connected to serial port"
-            return response
-        
         try:
             success, result = self.send_command(request.data)
             response.success = success
@@ -307,7 +354,6 @@ class CNCControllerNode(Node):
             self.get_logger().error(f"Error in send_gcode_callback: {e}")
             response.success = False
             response.message = str(e)
-        
         return response
     
     def home_callback(self, request, response):
@@ -372,32 +418,20 @@ class CNCControllerNode(Node):
         return response
         
     def set_feed_rate_callback(self, request, response):
-        """ROS2 service callback for setting feed rate (F)."""
+        """ROS2 service callback for setting feed rate."""
         try:
-            # Parse the feed rate from the request data
-            try:
-                feed_rate = float(request.data)
-                if feed_rate <= 0:
-                    raise ValueError("Feed rate must be a positive number")
-            except ValueError as ve:
-                self.get_logger().error(f"Invalid feed rate: {ve}")
-                response.success = False
-                response.message = f"Invalid feed rate: {ve}"
-                return response
-                
-            # Send the feed rate command (F)
-            command = f"F{feed_rate}"
-            success, result = self.send_command(command)
-            self.get_logger().info(f"Set feed rate to {feed_rate}")
+            feed_rate = float(request.data)
+            if feed_rate <= 0:
+                raise ValueError("Feed rate must be positive")
+            success, result = self.send_command(f"F{feed_rate}")
+            self.feed_rate = feed_rate if success else self.feed_rate
             response.success = success
-            response.message = f"Set feed rate to {feed_rate}" if success else f"Failed: {result}"
-        except Exception as e:
-            self.get_logger().error(f"Error setting feed rate: {e}")
+            response.message = f"Set feed rate to {feed_rate}" if success else result
+        except ValueError as ve:
             response.success = False
-            response.message = str(e)
-        
+            response.message = f"Invalid feed rate: {ve}"
         return response
-    
+
     def sensor_data_callback(self, msg):
         """Callback for processing magnetic sensor data."""
         # This callback is a stub that could be customized based on your specific needs
@@ -423,6 +457,255 @@ class CNCControllerNode(Node):
                 self.get_logger().error(f"Error closing serial connection: {e}")
         
         super().destroy_node()
+
+    # Helper methods for movement operations
+    def _ensure_absolute_mode(self):
+        """Ensure GRBL is in absolute mode (G90)"""
+        success, resp = self.send_command("G90")
+        return success
+
+    def _get_current_position(self):
+        """Get current machine position"""
+        if not hasattr(self, 'machine_position'):
+            return None
+        return self.machine_position
+
+    def _lift_z_if_needed(self, safe_z):
+        """Lift Z to safe height if currently below it"""
+        current_pos = self._get_current_position()
+        if not current_pos:
+            return False, "Cannot determine current position"
+            
+        if current_pos['z'] < safe_z:
+            success, resp = self.send_command(f"G0 Z{safe_z}")
+            return success, resp
+        return True, "Z already at safe height"
+
+    # New service callbacks
+    def move_to_target_origo_callback(self, request, response):
+        """Move to target origo position safely"""
+        try:
+            target_x = self.get_parameter('target_origo_x').value
+            target_y = self.get_parameter('target_origo_y').value
+            target_z = self.get_parameter('target_origo_z').value
+            safe_z = self.get_parameter('safe_z_for_xy_traverse').value
+            
+            # First ensure we're in absolute mode
+            success, _ = self.send_command("G90")
+            if not success:
+                response.success = False
+                response.message = "Failed to set absolute mode"
+                return response
+
+            # Get current position
+            current_pos = self._get_current_position()
+            if not current_pos:
+                response.success = False
+                response.message = "Could not determine current position"
+                return response
+
+            # If below safe Z, move up first
+            if current_pos['z'] < safe_z:
+                success, msg = self.send_jog_command(z=safe_z, relative=False)
+                if not success:
+                    response.success = False
+                    response.message = f"Failed to reach safe Z height: {msg}"
+                    return response
+
+            # Move to XY target
+            success, msg = self.send_jog_command(x=target_x, y=target_y, relative=False)
+            if not success:
+                response.success = False
+                response.message = f"Failed to reach target XY: {msg}"
+                return response
+
+            # Finally move to target Z
+            success, msg = self.send_jog_command(z=target_z, relative=False)
+            response.success = success
+            response.message = "Successfully reached target origo" if success else f"Failed to reach target Z: {msg}"
+            return response
+
+        except Exception as e:
+            response.success = False
+            response.message = f"Error during movement: {str(e)}"
+            return response
+
+    def move_over_target_origo_callback(self, request, response):
+        """Move to position above target origo at safe Z height"""
+        try:
+            target_x = self.get_parameter('target_origo_x').value
+            target_y = self.get_parameter('target_origo_y').value
+            safe_z = self.get_parameter('safe_z_for_xy_traverse').value
+            
+            # Get current position and lift Z if needed
+            current_pos = self._get_current_position()
+            if not current_pos:
+                return self._failed_response("Could not determine current position")
+            
+            if current_pos['z'] < safe_z:
+                success, msg = self.send_jog_command(z=safe_z, relative=False)
+                if not success:
+                    return self._failed_response(f"Failed to reach safe Z height: {msg}")
+            
+            # Move to target XY using jog command
+            success, msg = self.send_jog_command(x=target_x, y=target_y, relative=False)
+            
+            response.success = success
+            response.message = "Successfully moved over target" if success else f"Failed to reach target: {msg}"
+            return response
+            
+        except Exception as e:
+            return self._failed_response(f"Error: {str(e)}")
+
+    def dock_at_target_origo_callback(self, request, response):
+        """Dock at the target origo position"""
+        try:
+            if not self._ensure_absolute_mode():
+                return self._failed_response("Could not ensure absolute mode")
+
+            # Get target coordinates from parameters
+            target_x = self.get_parameter('target_origo_x').value
+            target_y = self.get_parameter('target_origo_y').value
+            target_z = self.get_parameter('target_origo_z').value
+            tolerance = self.get_parameter('docking_xy_tolerance').value
+
+            # Move to target position with tolerance
+            success, msg = self.send_command(f"G0 X{target_x} Y{target_y} Z{target_z} F{self.feed_rate}")
+            if not success:
+                return self._failed_response(f"Failed to dock at target: {msg}")
+
+            # Fine adjustment: move in small increments to find the exact origo
+            increments = [(-tolerance, -tolerance, 0), (tolerance, -tolerance, 0),
+                          (-tolerance, tolerance, 0), (tolerance, tolerance, 0)]
+            for inc in increments:
+                success, msg = self.send_command(f"G0 X{inc[0]} Y{inc[1]} Z{inc[2]} F{self.feed_rate}")
+                if not success:
+                    return self._failed_response(f"Failed in fine adjustment: {msg}")
+
+            response.success = True
+            response.message = "Successfully docked at target origo"
+            return response
+
+        except Exception as e:
+            return self._failed_response(f"Error: {str(e)}")
+
+    def move_to_random_safe_callback(self, request, response):
+        """Move to random position within safe boundaries"""
+        try:
+            # Get boundaries from parameters
+            min_x = self.get_parameter('random_safe_min_x').value
+            max_x = self.get_parameter('random_safe_max_x').value
+            min_y = self.get_parameter('random_safe_min_y').value
+            max_y = self.get_parameter('random_safe_max_y').value
+            min_z = self.get_parameter('random_safe_min_z').value
+            max_z = self.get_parameter('random_safe_max_z').value
+            safe_z = self.get_parameter('safe_z_for_xy_traverse').value
+
+            # Generate random target position
+            import random
+            target_x = random.uniform(min_x, max_x)
+            target_y = random.uniform(min_y, max_y)
+            target_z = random.uniform(min_z, max_z)
+
+            # Safety sequence: safe Z, then XY, then target Z
+            current_pos = self._get_current_position()
+            if not current_pos:
+                return self._failed_response("Could not determine current position")
+
+            if current_pos['z'] < safe_z:
+                success, msg = self.send_jog_command(z=safe_z, relative=False)
+                if not success:
+                    return self._failed_response(f"Failed to reach safe Z: {msg}")
+
+            # Move XY
+            success, msg = self.send_jog_command(x=target_x, y=target_y, relative=False)
+            if not success:
+                return self._failed_response(f"Failed to reach target XY: {msg}")
+
+            # Move Z
+            success, msg = self.send_jog_command(z=target_z, relative=False)
+            
+            response.success = success
+            response.message = f"Moved to random position ({target_x:.1f}, {target_y:.1f}, {target_z:.1f})" if success else f"Failed: {msg}"
+            return response
+
+        except Exception as e:
+            return self._failed_response(f"Error: {str(e)}")
+
+    def jog_increment_callback(self, request, response):
+        """Handle jog movement requests with JSON parameters"""
+        try:
+            # Parse JSON request
+            params = json.loads(request.data)
+            
+            # Extract optional parameters with defaults
+            x = params.get('x')
+            y = params.get('y')
+            z = params.get('z')
+            feed = params.get('feed', self.feed_rate)
+            relative = params.get('relative', True)
+            
+            success, msg = self.send_jog_command(
+                x=x, y=y, z=z, 
+                feed_rate=feed,
+                relative=relative
+            )
+            
+            response.success = success
+            response.message = msg
+            return response
+            
+        except json.JSONDecodeError:
+            response.success = False
+            response.message = "Invalid JSON format in request"
+            return response
+        except Exception as e:
+            response.success = False
+            response.message = str(e)
+            return response
+
+    def emergency_stop_callback(self, request, response):
+        """Immediate halt of all motion"""
+        try:
+            if self.serial_connected:
+                # Send feed hold and reset based on Node.js implementation
+                self.serial_connection.write(b"!")  # Feed hold
+                time.sleep(0.1)
+                self.serial_connection.write(b"\x18")  # Soft reset
+                response.success = True
+                response.message = "Emergency stop executed"
+            else:
+                response.success = False
+                response.message = "Not connected to GRBL"
+        except Exception as e:
+            response.success = False
+            response.message = f"Emergency stop failed: {str(e)}"
+        return response
+
+    def unlock_alarm_callback(self, request, response):
+        """Clear alarm lock using $X command"""
+        try:
+            success, msg = self.send_command("$X")
+            response.success = success
+            response.message = "Alarm cleared" if success else msg
+            return response
+        except Exception as e:
+            response.success = False
+            response.message = f"Failed to clear alarm: {str(e)}"
+            return response
+
+    def _get_current_position(self):
+        """Get current machine position"""
+        if not hasattr(self, 'machine_position'):
+            return None
+        return self.machine_position
+
+    def _failed_response(self, message):
+        """Helper to create failed service responses"""
+        response = Trigger.Response()
+        response.success = False
+        response.message = message
+        return response
 
 
 def main(args=None):

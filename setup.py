@@ -23,8 +23,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            "cnc_node = magnetic_homing.cnc_controller_node:main",
-            "magnetic_sensor_node = magnetic_homing.magnetic_sensor_node:main"
+            "cnc_node = cnc.cnc_controller_node:main",
+            "magnetic_sensor_node = magnetic_sensor.magnetic_sensor_node:main",
+            "terminal_gui_node = gui.terminal_gui_node:main",
         ],
     },
 )

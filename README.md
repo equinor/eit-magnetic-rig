@@ -1,6 +1,5 @@
 # Magnetic Homing ROS2 Package
 
-
 **ARCHIVED**  
 This repo is intended as a _proof of concept_ for drone vendors and other third parties to be inspired by and/or make it their own for their specific use case.  
 It is _not_ in any way, shape or form production ready code, and will not be maintained.
@@ -58,8 +57,8 @@ For more detailed information about the physical setup and sensor arrangement, s
   - **Message Type**: `MagneticSensorData.msg`
   - **Fields**: `float32 sensor_a`, `float32 sensor_b`, `float32 sensor_c`, `float32 sensor_z`
 - **Service**: `/set_sensor_ip`
-  - **Service Type**: `std_srvs/SetBool`
-  - **Request**: `bool data` (containing the IP address as string)
+  - **Service Type**: `std_srvs/setBool`
+  - **Request**: `string data` (containing the IP address)
   - **Response**: `bool success, string message`
 
 ---
@@ -88,8 +87,8 @@ For more detailed information about the physical setup and sensor arrangement, s
 > **IMPORTANT**: Please refer to the [CNC Safety Primer](docs/tutorials/CNC_safety_primer.md) document before operating the CNC controller. It contains critical safety information, including the risk of mechanical collisions at extreme positions.
 - **Services**:
   - `/cnc/send_gcode` - Send G-code commands to the CNC controller
-    - **Service Type**: `std_srvs/SetBool`
-    - **Request**: `bool data` (containing the G-code command as string)
+    - **Service Type**: `std_srvs/setBool`
+    - **Request**: `string data` (containing the G-code command)
     - **Response**: `bool success, string message`
   - `/cnc/home` - Execute the homing procedure
     - **Service Type**: `std_srvs/Trigger`
@@ -108,8 +107,8 @@ For more detailed information about the physical setup and sensor arrangement, s
     - **Request**: (empty)
     - **Response**: `bool success, string message`
   - `/cnc/set_feed_rate` - Set the feed rate for movements
-    - **Service Type**: `std_srvs/SetBool`
-    - **Request**: `bool data` (containing the feed rate as string)
+    - **Service Type**: `std_srvs/setBool`
+    - **Request**: `string data` (containing the feed rate)
     - **Response**: `bool success, string message`
 
 ---
@@ -142,17 +141,17 @@ For more detailed information about the physical setup and sensor arrangement, s
 #### Using the Launch File (Recommended)
 Start both nodes with a single command:
 ```bash
-ros2 launch magnetic_homing magnetic_homing.launch.py sensor_ip:=192.168.1.100 serial_port:=/dev/ttyUSB0
+ros2 launch magnetic_homing magnetic_homing.launch.py sensor_ip:=192.168.1.254 serial_port:=/dev/ttyUSB0
 ```
 
 #### Starting Individual Nodes
 1. **Start the Magnetic Sensor Node**:
    ```bash
-   ros2 run magnetic_homing magnetic_sensor_node.py --ros-args -p sensor_ip:=192.168.1.100
+   ros2 run magnetic_homing magnetic_sensor_node.py --ros-args -p sensor_ip:=192.168.1.254
    ```
    - Use the `/set_sensor_ip` service to reconfigure the sensor's IP address:
      ```bash
-     ros2 service call /set_sensor_ip std_srvs/srv/SetBool "{data: '192.168.1.100'}"
+     ros2 service call /set_sensor_ip std_srvs/srv/setBool "{data: '192.168.1.254'}"
      ```
 
 2. **Start the CNC Controller Node**:
@@ -161,7 +160,7 @@ ros2 launch magnetic_homing magnetic_homing.launch.py sensor_ip:=192.168.1.100 s
    ```
    - Use the `/cnc/send_gcode` service to send custom G-code commands:
      ```bash
-     ros2 service call /cnc/send_gcode std_srvs/srv/SetBool "{data: 'G0 X10 Y10'}"
+     ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: 'G0 X10 Y10'}"
      ```
    - Use the `/cnc/home` service to home the machine:
      ```bash
@@ -171,6 +170,53 @@ ros2 launch magnetic_homing magnetic_homing.launch.py sensor_ip:=192.168.1.100 s
      ```bash
      ros2 service call /cnc/reset std_srvs/srv/Trigger "{}"
      ```
+
+### Running the Terminal User Interface
+
+Start the TUI node to control the system through a terminal-based interface:
+```bash
+ros2 run magnetic_homing terminal_gui_node
+```
+
+The TUI provides:
+- Real-time display of CNC status and position
+- Live magnetic sensor data readings
+- GRBL response monitoring
+- Menu-driven access to all CNC control functions:
+  - Basic operations (Home, Reset, Emergency Stop)
+  - Movement control (Absolute/Relative modes)
+  - Target positioning commands
+  - Custom G-code input
+  - Feed rate control
+  - Jogging functionality
+
+Navigate using the numbered menu options. Some commands may prompt for additional input (like G-code or feed rate values). Press 'Q' to quit the interface.
+
+> **Note**: The TUI requires a terminal that supports curses and should be run in a full-size terminal window for optimal display.
+
+### Running the Graphical User Interface
+
+Start the GUI node to control the system through a graphical interface:
+```bash
+ros2 run magnetic_homing_gui cnc_gui_node.py
+```
+
+The GUI provides a user-friendly interface with:
+- Status monitoring panel showing:
+  - CNC state and position
+  - Movement mode and feed rate
+  - Real-time magnetic sensor readings
+- Tabbed control interface with:
+  - Basic Controls: Home, Reset, Emergency Stop, Mode switching
+  - Movement Controls: Target positioning and docking commands
+  - Jog Control: Directional buttons for fine-grained movement
+- Interactive controls:
+  - Custom G-code input
+  - Feed rate adjustment
+  - Configurable jog increments
+- GRBL response monitoring
+
+The GUI requires a desktop environment and Python's tkinter library. For headless systems or remote operation, use the Terminal User Interface instead.
 
 ### Example Workflow
 - Start both nodes using the launch file.
@@ -196,11 +242,11 @@ ros2 launch magnetic_homing magnetic_homing.launch.py sensor_ip:=192.168.1.100 s
   ```
 - Set feed rate to 500 mm/min:
   ```bash
-  ros2 service call /cnc/set_feed_rate std_srvs/srv/SetBool "{data: '500'}"
+  ros2 service call /cnc/set_feed_rate std_srvs/srv/setBool "{data: '500'}"
   ```
 - Send G-code commands to move the CNC rig to a specific position (in absolute mode):
   ```bash
-  ros2 service call /cnc/send_gcode std_srvs/srv/SetBool "{data: 'G0 X10 Y10'}"
+  ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: 'G0 X10 Y10'}"
   ```
 - Switch to relative positioning mode:
   ```bash
@@ -208,7 +254,7 @@ ros2 launch magnetic_homing magnetic_homing.launch.py sensor_ip:=192.168.1.100 s
   ```
 - Send G-code commands to move the CNC rig relative to current position:
   ```bash
-  ros2 service call /cnc/send_gcode std_srvs/srv/SetBool "{data: 'G0 X5 Y-3'}"
+  ros2 service call /cnc/send_gcode std_srvs/srv/setBool "{data: 'G0 X5 Y-3'}"
   ```
 
 ---

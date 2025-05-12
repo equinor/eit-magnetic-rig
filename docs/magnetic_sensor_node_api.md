@@ -4,9 +4,24 @@ This document provides comprehensive API documentation for the Magnetic Sensor N
 
 ## Overview
 
-The Magnetic Sensor Node (`magnetic_sensor_node.py`) communicates with magnetic sensors over TCP/IP to read magnetic field strength values. It implements a specific protocol for querying the sensors and publishes the data for other nodes to consume.
+The Magnetic Sensor Node communicates with magnetic sensors over TCP/IP to read magnetic field strength values. It implements a specific protocol for querying the sensors and publishes the data for other nodes to consume.
 
-## Published Topics
+Implements sensor initialization and continuous data polling.
+
+## Node Details
+- Name: `magnetic_sensor_node`
+- Implementation: `magnetic_homing/magnetic_sensor_node.py`
+
+## Parameters
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| sensor_ip | string | 192.168.1.254 | Sensor array IP address |
+| publish_rate | double | 10.0 | Data publishing rate in Hz |
+| calibration_factor | double | 1.0 | Scaling factor for sensor values |
+| calibration_offset | double | 0.0 | Offset for sensor values |
+| connection_retry_limit | int | 5 | Max reconnection attempts |
+
+## Topics
 
 ### `/magnetic_sensor_data`
 
@@ -52,7 +67,7 @@ Dynamically reconfigures the IP address used to connect to the magnetic sensor d
 
 ### Sensor Configuration
 
-- **`sensor_ip`** (string, default: "192.168.1.100")
+- **`sensor_ip`** (string, default: "192.168.1.254")
   - The IP address of the magnetic sensor device
   - Can be changed at runtime using the `/set_sensor_ip` service
 
@@ -147,3 +162,6 @@ ros2 param set /magnetic_sensor_node calibration_offset -0.5
 ```
 
 This would apply the formula: `calibrated_value = raw_value * 1.25 - 0.5`
+
+## Protocol Implementation
+See detailed protocol documentation in `/docs/protocol/magnetic_sensor.md`
