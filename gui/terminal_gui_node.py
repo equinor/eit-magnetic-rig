@@ -172,6 +172,7 @@ class CNCTuiNode(Node):
                 "3. Dock at Target Origo",
                 "4. Move to Random Safe Position",
                 "5. Jog Mode",
+                "9. EMERGENCY STOP",
                 "0. Back to Main Menu"
             ]
         elif self.current_menu == 'settings':
@@ -179,6 +180,7 @@ class CNCTuiNode(Node):
                 "1. Set Absolute Mode",
                 "2. Set Relative Mode",
                 "3. Set Feed Rate",
+                "9. EMERGENCY STOP",
                 "0. Back to Main Menu"
             ]
         elif self.current_menu == 'recovery':
@@ -271,6 +273,8 @@ class CNCTuiNode(Node):
                 self.call_service('random_move')
             elif ch == '5':
                 self.enter_jog_mode()
+            elif ch == '9':
+                self.call_service('emergency_stop')
             elif ch == '0':
                 self.current_menu = 'main'
         
@@ -283,6 +287,8 @@ class CNCTuiNode(Node):
                 self.input_mode = True
                 self.input_buffer = ""
                 self.last_response = "Enter feed rate:"
+            elif ch == '9':
+                self.call_service('emergency_stop')
             elif ch == '0':
                 self.current_menu = 'main'
         
@@ -325,6 +331,41 @@ class CNCTuiNode(Node):
             self.update_display()
         
         self.last_response = "Exited jog mode"
+
+    def process_input(self):
+        """Process buffered input"""
+        if not self.input_buffer:
+            return
+
+        if self.last_response == "Enter G-code command:":
+            self.call_service('send_gcode', self.input_buffer)
+        elif self.last_response == "Enter feed rate:":
+            self.call_service('set_feed', self.input_buffer)
+
+    def call_service(self, service_name, data=None):
+        """Call a ROS2 service"""
+        client = self.service_clients.get(service_name)
+        if not client:
+            self.last_response = f"Service {service_name} not found"
+            return
+
+        if not client.service_is_ready():
+            self.last_response = f"Service {service_name} is not available"
+            return
+
+        try:
+            if data is not None:
+                request = SetBool.Request()
+                request.data = data
+            else:
+                request = Trigger.Request()
+
+            future = client.call_async(request)
+            # We're not waiting for the response - it will come via the response topic
+            self.last_response = f"Called service {service_name}"
+        except Exception as e:
+            self.last_response = f"Error calling service {service_name}: {str(e)}"
+            
 
 def main(args=None):
     """Main function"""
