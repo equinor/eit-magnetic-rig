@@ -42,6 +42,7 @@ class CNCTuiNode(Node):
         self.last_response = ""
         self.input_buffer = ""
         self.input_mode = False
+        self.current_menu = 'main'  # Track current menu state
         
     def setup_curses(self):
         curses.start_color()
@@ -154,18 +155,43 @@ class CNCTuiNode(Node):
         self.menu_win.box()
         self.menu_win.addstr(0, 2, "Menu", curses.A_BOLD)
         
-        menu_items = [
-            "1. Home CNC",
-            "2. Movement Controls >",
-            "3. Send G-Code",
-            "4. Settings >",
-            "5. Recovery >",
-            "9. EMERGENCY STOP",
-            "0. QUIT"
-        ]
+        if self.current_menu == 'main':
+            menu_items = [
+                "1. Home CNC",
+                "2. Movement Controls >",
+                "3. Send G-Code",
+                "4. Settings >",
+                "5. Recovery >",
+                "9. EMERGENCY STOP",
+                "0. QUIT"
+            ]
+        elif self.current_menu == 'movement':
+            menu_items = [
+                "1. Move to Target Origo",
+                "2. Move Over Target Origo",
+                "3. Dock at Target Origo",
+                "4. Move to Random Safe Position",
+                "5. Jog Mode",
+                "9. EMERGENCY STOP",
+                "0. Back to Main Menu"
+            ]
+        elif self.current_menu == 'settings':
+            menu_items = [
+                "1. Set Absolute Mode",
+                "2. Set Relative Mode",
+                "3. Set Feed Rate",
+                "9. EMERGENCY STOP",
+                "0. Back to Main Menu"
+            ]
+        elif self.current_menu == 'recovery':
+            menu_items = [
+                "1. Reset Controller",
+                "2. Unlock Alarm",
+                "0. Back to Main Menu"
+            ]
         
         for i, item in enumerate(menu_items):
-            color = curses.color_pair(1) if "EMERGENCY" in item or "QUIT" in item else curses.A_NORMAL
+            color = curses.color_pair(1) if "EMERGENCY" in item else curses.A_NORMAL
             self.menu_win.addstr(i + 1, 2, item, color)
         
         if self.input_mode:
@@ -216,27 +242,95 @@ class CNCTuiNode(Node):
     def process_menu_selection(self, key):
         """Handle menu selections"""
         ch = chr(key)
-        if ch in '12345':
+        
+        if self.current_menu == 'main':
             if ch == '1':
                 self.call_service('home')
             elif ch == '2':
-                # Movement Controls submenu handling would go here
-                pass
+                self.current_menu = 'movement'
             elif ch == '3':
                 self.input_mode = True
                 self.input_buffer = ""
                 self.last_response = "Enter G-code command:"
             elif ch == '4':
-                # Settings submenu handling would go here
-                pass
+                self.current_menu = 'settings'
             elif ch == '5':
-                # Recovery submenu handling would go here
-                pass
-        elif ch == '9':
-            self.call_service('emergency_stop')
-        elif ch == '0':
-            self.call_service('emergency_stop')  # Ensure machine stops before quitting
-            raise KeyboardInterrupt
+                self.current_menu = 'recovery'
+            elif ch == '9':
+                self.call_service('emergency_stop')
+            elif ch == '0':
+                self.call_service('emergency_stop')
+                raise KeyboardInterrupt
+        
+        elif self.current_menu == 'movement':
+            if ch == '1':
+                self.call_service('move_to_target')
+            elif ch == '2':
+                self.call_service('move_over_target')
+            elif ch == '3':
+                self.call_service('dock_target')
+            elif ch == '4':
+                self.call_service('random_move')
+            elif ch == '5':
+                self.enter_jog_mode()
+            elif ch == '9':
+                self.call_service('emergency_stop')
+            elif ch == '0':
+                self.current_menu = 'main'
+        
+        elif self.current_menu == 'settings':
+            if ch == '1':
+                self.call_service('set_absolute')
+            elif ch == '2':
+                self.call_service('set_relative')
+            elif ch == '3':
+                self.input_mode = True
+                self.input_buffer = ""
+                self.last_response = "Enter feed rate:"
+            elif ch == '9':
+                self.call_service('emergency_stop')
+            elif ch == '0':
+                self.current_menu = 'main'
+        
+        elif self.current_menu == 'recovery':
+            if ch == '1':
+                self.call_service('reset')
+            elif ch == '2':
+                self.call_service('unlock_alarm')
+            elif ch == '0':
+                self.current_menu = 'main'
+
+    def enter_jog_mode(self):
+        """Handle jog mode with arrow keys"""
+        self.last_response = "Jog Mode: Use arrow keys to move, ESC to exit"
+        jog_active = True
+        increment = 1.0  # Default jog increment
+        
+        while jog_active:
+            key = self.screen.getch()
+            if key == 27:  # ESC
+                jog_active = False
+            elif key in [curses.KEY_UP, curses.KEY_DOWN, curses.KEY_LEFT, curses.KEY_RIGHT]:
+                jog_data = {
+                    'relative': True,
+                    'feed': 1000,  # Default jog feed rate
+                }
+                
+                if key == curses.KEY_UP:
+                    jog_data['y'] = increment
+                elif key == curses.KEY_DOWN:
+                    jog_data['y'] = -increment
+                elif key == curses.KEY_LEFT:
+                    jog_data['x'] = -increment
+                elif key == curses.KEY_RIGHT:
+                    jog_data['x'] = increment
+                
+                self.call_service('jog', json.dumps(jog_data))
+            
+            rclpy.spin_once(self, timeout_sec=0.1)
+            self.update_display()
+        
+        self.last_response = "Exited jog mode"
 
     def process_input(self):
         """Process buffered input"""
@@ -271,6 +365,7 @@ class CNCTuiNode(Node):
             self.last_response = f"Called service {service_name}"
         except Exception as e:
             self.last_response = f"Error calling service {service_name}: {str(e)}"
+            
 
 def main(args=None):
     """Main function"""

@@ -75,7 +75,7 @@ class CNCControllerNode(Node):
         self.work_position = {'x': 0.0, 'y': 0.0, 'z': 0.0}
         self.machine_state = "Unknown"
         self.movement_mode = "absolute"  # Default to absolute movement (G90)
-        self.feed_rate = 100.0  # Default feed rate (mm/min)
+        self.feed_rate = 1000.0  # Default feed rate (mm/min)
         self.last_error = None
         self.last_alarm = None
         self.response_buffer = []
