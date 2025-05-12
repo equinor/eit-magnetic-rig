@@ -1,7 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float32MultiArray
-from std_srvs.srv import SetString  # Changed from SetBool
+from std_srvs.srv import SetBool
 import socket
 import struct
 import time
@@ -66,7 +66,7 @@ class MagneticSensorNode(Node):
             self.publisher_ = self.create_publisher(Float32MultiArray, 'magnetic_sensor_data', 10)
             self.get_logger().info('Using Float32MultiArray message type')
             
-        self.srv = self.create_service(SetString, 'set_sensor_ip', self.set_sensor_ip_callback)
+        self.srv = self.create_service(SetBool, 'set_sensor_ip', self.set_sensor_ip_callback)
         
         # Create timer for periodic sensor readings
         self.timer = self.create_timer(1.0 / publish_rate, self.timer_callback)

@@ -1,7 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float32MultiArray, String, Float32
-from std_srvs.srv import Trigger, SetString
+from std_srvs.srv import Trigger, SetBool
 import serial
 import time
 import threading
@@ -96,7 +96,7 @@ class CNCControllerNode(Node):
         
         # Create services
         self.gcode_service = self.create_service(
-            SetString, 'cnc/send_gcode', self.send_gcode_callback
+            SetBool, 'cnc/send_gcode', self.send_gcode_callback
         )
         self.home_service = self.create_service(
             Trigger, 'cnc/home', self.home_callback
@@ -111,7 +111,7 @@ class CNCControllerNode(Node):
             Trigger, 'cnc/set_relative_mode', self.set_relative_mode_callback
         )
         self.set_feed_rate_service = self.create_service(
-            SetString, 'cnc/set_feed_rate', self.set_feed_rate_callback
+            SetBool, 'cnc/set_feed_rate', self.set_feed_rate_callback
         )
         
         # Add new movement services
@@ -128,7 +128,7 @@ class CNCControllerNode(Node):
             Trigger, 'cnc/move_to_random_safe_position', self.move_to_random_safe_callback
         )
         self.jog_service = self.create_service(
-            SetString, 'cnc/jog_increment', self.jog_increment_callback
+            SetBool, 'cnc/jog_increment', self.jog_increment_callback
         )
         self.estop_service = self.create_service(
             Trigger, 'cnc/emergency_stop', self.emergency_stop_callback
