@@ -4,9 +4,52 @@ This document provides comprehensive API documentation for the CNC Controller No
 
 ## Overview
 
-The CNC Controller Node (`cnc_controller_node.py`) communicates with a GRBL-based CNC controller over a serial connection. It provides a ROS2 interface for sending commands, receiving status updates, and controlling the CNC rig.
+The CNC Controller Node communicates with a GRBL-based CNC controller over a serial connection. It provides a ROS2 interface for sending commands, receiving status updates, and controlling the CNC rig.
 
-## Published Topics
+## Node Details
+- Name: `cnc_controller_node`
+- Implementation: `magnetic_homing/cnc_controller_node.py`
+
+## Parameters
+
+### Connection Parameters
+
+- **`serial_port`** (string, default: "/dev/ttyUSB0")
+  - The serial port connected to the GRBL controller
+
+- **`baud_rate`** (integer, default: 115200)
+  - The baud rate for serial communication
+
+- **`status_interval`** (double, default: 0.2)
+  - The interval at which status messages are requested from GRBL, in seconds
+
+### State Tracking
+
+The node internally tracks several states:
+
+- **Movement Mode:** "absolute" or "relative"
+- **Feed Rate:** Current feed rate setting in mm/min
+- **Machine Position:** Current coordinates in machine space
+- **Work Position:** Current coordinates in work coordinate space
+- **Machine State:** Current GRBL state (Idle, Run, Hold, Alarm, etc.)
+
+### Target Origo Parameters
+
+- **`target_origo_x`** (float, default: 524.0)
+  - Target X coordinate for docking
+
+- **`target_origo_y`** (float, default: 318.0)
+  - Target Y coordinate for docking
+
+- **`target_origo_z`** (float, default: -235.0)
+  - Target Z coordinate for docking
+
+- **`safe_z_for_xy_traverse`** (float, default: -185.0)
+  - Safe Z height for XY movements
+
+## Topics
+
+### Published Topics
 
 ### `/cnc/status`
 
@@ -70,15 +113,38 @@ Subscribes to magnetic sensor data from the Magnetic Sensor Node.
 
 ## Services
 
+### Movement Services (All Using Standard Service Types)
+
+#### `/cnc/move_to_target_origo` (std_srvs/Trigger)
+Safely moves to the configured target origo position:
+1. Lifts to safe Z height if below
+2. Moves to target XY
+3. Descends to target Z
+
+#### `/cnc/move_over_target_origo` (std_srvs/Trigger)
+Moves to position above target origo at safe Z height.
+
+#### `/cnc/dock_at_target_origo` (std_srvs/Trigger)  
+Docks at target origo if already within XY tolerance.
+
+#### `/cnc/jog_increment` (std_srvs/SetString)
+Executes a jog movement. Expects JSON-formatted string:
+```json
+{
+  "x": float,       // X increment (optional)
+  "y": float,       // Y increment (optional)
+  "z": float,       // Z increment (optional)
+  "feed": float,    // Feed rate (optional)
+  "relative": bool  // Use relative coords (default: true)
+}
+```
+
 ### `/cnc/send_gcode`
 
-**Service Type:** `std_srvs/SetBool`
-
-**Description:**
-Sends a G-code command to the CNC controller.
+**Service Type:** `std_srvs/SetString`
 
 **Request:**
-- `bool data` - Contains the G-code command as a string
+- `string data` - Contains the G-code command
 
 **Response:**
 - `bool success` - Indicates whether the command was sent successfully
@@ -138,13 +204,10 @@ Sets the CNC controller to relative positioning mode (G91).
 
 ### `/cnc/set_feed_rate`
 
-**Service Type:** `std_srvs/SetBool`
-
-**Description:**
-Sets the feed rate for CNC movements.
+**Service Type:** `std_srvs/SetString`
 
 **Request:**
-- `bool data` - Contains the feed rate as a string (e.g., "500")
+- `string data` - Contains the feed rate value
 
 **Response:**
 - `bool success` - Indicates whether the feed rate was set successfully
@@ -172,6 +235,20 @@ The node internally tracks several states:
 - **Machine Position:** Current coordinates in machine space
 - **Work Position:** Current coordinates in work coordinate space
 - **Machine State:** Current GRBL state (Idle, Run, Hold, Alarm, etc.)
+
+### Target Origo Parameters
+
+- **`target_origo_x`** (float, default: 524.0)
+  - Target X coordinate for docking
+
+- **`target_origo_y`** (float, default: 318.0)
+  - Target Y coordinate for docking
+
+- **`target_origo_z`** (float, default: -235.0)
+  - Target Z coordinate for docking
+
+- **`safe_z_for_xy_traverse`** (float, default: -185.0)
+  - Safe Z height for XY movements
 
 ## GRBL Communication
 

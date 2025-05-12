@@ -9,7 +9,7 @@ def generate_launch_description():
     # Launch arguments
     sensor_ip_arg = DeclareLaunchArgument(
         'sensor_ip',
-        default_value='192.168.1.100',
+        default_value='192.168.1.254',
         description='IP address of the magnetic sensor device'
     )
     

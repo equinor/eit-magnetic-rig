@@ -28,7 +28,7 @@ This guide will help you quickly set up and start using the Magnetic Homing ROS2
 
 1. **Magnetic Sensors**:
    - Connect the magnetic sensor array to your network
-   - Note the IP address (default is `192.168.1.100`)
+   - Note the IP address (default is `192.168.1.254`)
    - Ensure the device is accessible over TCP port 2468
 
 2. **CNC Controller**:
@@ -43,7 +43,7 @@ This guide will help you quickly set up and start using the Magnetic Homing ROS2
 The easiest way to start both nodes with proper configuration is using the provided launch file:
 
 ```bash
-ros2 launch magnetic_homing magnetic_homing.launch.py sensor_ip:=192.168.1.100 serial_port:=/dev/ttyUSB0
+ros2 launch magnetic_homing magnetic_homing.launch.py sensor_ip:=192.168.1.254 serial_port:=/dev/ttyUSB0
 ```
 
 Customize the `sensor_ip` and `serial_port` parameters to match your hardware configuration.
@@ -54,7 +54,7 @@ Alternatively, you can start each node individually:
 
 1. **Start the Magnetic Sensor Node**:
    ```bash
-   ros2 run magnetic_homing magnetic_sensor_node.py --ros-args -p sensor_ip:=192.168.1.100
+   ros2 run magnetic_homing magnetic_sensor_node.py --ros-args -p sensor_ip:=192.168.1.254
    ```
 
 2. **Start the CNC Controller Node**:
@@ -125,6 +125,63 @@ ros2 service call /cnc/send_gcode std_srvs/srv/SetBool "{data: 'G0 X100 Y100'}"
 # In relative mode, move 10mm in X and -5mm in Y
 ros2 service call /cnc/send_gcode std_srvs/srv/SetBool "{data: 'G0 X10 Y-5'}"
 ```
+
+### Target Position Setup
+
+1. Configure target origo position:
+```bash
+# Set target origo coordinates (example values)
+ros2 param set /cnc_controller_node target_origo_x 524.0
+ros2 param set /cnc_controller_node target_origo_y 318.0
+ros2 param set /cnc_controller_node target_origo_z -235.0
+```
+
+2. Basic target movement commands:
+```bash
+# Move to position above target
+ros2 service call /cnc/move_over_target_origo std_srvs/Trigger
+# Dock at target (if within tolerance)
+ros2 service call /cnc/dock_at_target_origo std_srvs/Trigger
+```
+
+### Emergency Procedures
+
+1. **Immediate Stop:**
+```bash
+ros2 service call /cnc/emergency_stop std_srvs/Trigger
+```
+
+2. **After Emergency Stop:**
+   - Wait for complete stop
+   - Clear alarms: `ros2 service call /cnc/unlock_alarm std_srvs/Trigger`
+   - Re-home if needed: Send `$H` via gcode service
+
+### Key Configuration Parameters
+
+The following parameters control critical movement behaviors:
+
+- `target_origo_x/y/z`: Target docking position
+- `safe_z_for_xy_traverse`: Safe Z height for XY movements
+- `docking_xy_tolerance`: Maximum allowed XY offset for docking
+
+For complete parameter documentation, see `docs/cnc_controller_node_api.md`.
+
+### Common Issues and Solutions
+
+1. **No Movement:**
+   - Check if in alarm state
+   - Verify within soft limits
+   - Try unlocking with `$X`
+
+2. **Position Lost:**
+   - Use emergency stop
+   - Re-home machine
+   - Verify parameters
+
+3. **Erratic Movement:**
+   - Check feed rates
+   - Verify Z safety height
+   - Consider emergency stop
 
 ## Next Steps
 
