@@ -1,0 +1,12 @@
+{
+    "name": "node-red-project",
+    "description": "A Node-RED Project",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "node-red-contrib-queue-gate": "~1.5.5",
+        "node-red-dashboard": "~3.6.5",
+        "node-red-node-serialport": "~2.0.2",
+        "nodes": "file:../eit-magnetic-rig/nodes"
+    }
+}

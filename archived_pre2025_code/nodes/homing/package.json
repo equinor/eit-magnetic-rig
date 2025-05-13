@@ -1,0 +1,15 @@
+{
+  "name": "homing",
+  "collaborators": [
+    "Ole Martin Gjersvik <olgj@equinor.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "homing_bg.wasm",
+    "homing.js",
+    "homing_bg.js",
+    "homing.d.ts"
+  ],
+  "main": "homing.js",
+  "types": "homing.d.ts"
+}

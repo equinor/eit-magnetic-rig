@@ -1,0 +1,21 @@
+{
+  "name": "nodes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "node-red": {
+    "nodes": {
+      "lower-case": "lower-case.js",
+      "parse-status": "parse-status.js",
+      "magnetic-sensors": "magnetic-sensors.js"
+    }
+  },
+  "dependencies": {
+    "homing": "file:homing"
+  }
+}
