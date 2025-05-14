@@ -46,7 +46,7 @@ class MagneticSensorNode(Node):
         
         # Parameters (with explicit defaults)
         self.declare_parameter('sensor_ip', '192.168.1.254')  # Fixed IP as per requirements
-        self.declare_parameter('publish_rate', 10.0)
+        self.declare_parameter('publish_rate', 5.0)
         self.declare_parameter('calibration_factor', 1.0)
         self.declare_parameter('calibration_offset', 0.0)
         self.declare_parameter('connection_retry_limit', 5)
