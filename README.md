@@ -144,32 +144,6 @@ Navigate using the numbered menu options. Some commands may prompt for additiona
 > **Note**: The terminal gui node requires a terminal that supports curses and should be run in a full-size terminal window for optimal display.
 
 
-### Running the Graphical User Interface
-
-**TODO:** This is currently a work in progress and does not work.
-
-Start the GUI node to control the system through a graphical interface:
-```bash
-ros2 run magnetic_homing_gui cnc_gui_node.py
-```
-
-The GUI provides a user-friendly interface with:
-- Status monitoring panel showing:
-  - CNC state and position
-  - Movement mode and feed rate
-  - Real-time magnetic sensor readings
-- Tabbed control interface with:
-  - Basic Controls: Home, Reset, Emergency Stop, Mode switching
-  - Movement Controls: Target positioning and docking commands
-  - Jog Control: Directional buttons for fine-grained movement
-- Interactive controls:
-  - Custom G-code input
-  - Feed rate adjustment
-  - Configurable jog increments
-- GRBL response monitoring
-
-The GUI requires a desktop environment and Python's tkinter library. For headless systems or remote operation, use the Terminal User Interface instead.
-
 
 ### Example Workflow
 - Start both nodes using the launch file.
